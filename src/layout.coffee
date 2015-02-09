@@ -46,6 +46,11 @@ class Layout extends EventEmitter
     container.appendChild text_node
 
     @messages.appendChild container
+    @scrollToBottom @messages
+    return
+
+  scrollToBottom: (node) ->
+    node.scrollTop = node.scrollHeight
     return
 
 module.exports = Layout
