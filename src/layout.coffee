@@ -1,4 +1,5 @@
 EventEmitter = require './event_emitter'
+Utils = require './utils'
 
 class Layout extends EventEmitter
   constructor: ->
@@ -23,7 +24,7 @@ class Layout extends EventEmitter
   create_input: ->
     @input = document.createElement 'textarea'
     @input.id = 'bows-input'
-    @input.placeholder = '[Input zone]'
+    @input.placeholder = 'Type your message here...'
     @input.onkeypress = (event) => @handle_input event.keyCode
 
     @root.appendChild @input
@@ -39,10 +40,18 @@ class Layout extends EventEmitter
 
     return false
 
-  addMessage: (serializedMessage) ->
-    text_node = document.createTextNode serializedMessage
+  addMessage: (serialized_message) ->
+    time_node = document.createTextNode Utils.currentTimeString()
+    text_node = document.createTextNode serialized_message
+
+    time_container = document.createElement 'span'
+    time_container.className = 'bows-time'
+    time_container.appendChild time_node
 
     container = document.createElement 'p'
+    container.className = 'bows-message'
+    container.appendChild time_container
+    container.appendChild Utils.nodeSeparator()
     container.appendChild text_node
 
     @messages.appendChild container

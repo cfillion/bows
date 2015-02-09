@@ -12,8 +12,8 @@ class Socket extends EventEmitter
     @socket.send 'hello world'
     return
   
-  onmessage: (serializedMessage) ->
-    @emit 'message', serializedMessage
+  onmessage: (serialized_message) ->
+    @emit 'message', serialized_message
     return
 
   send: (message) ->

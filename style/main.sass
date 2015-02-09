@@ -5,7 +5,10 @@
   color: $main-color
 
   display: flex
+  display: -webkit-flex
+
   flex-direction: column
+  -webkit-flex-direction: column
 
   ::-webkit-scrollbar
     width: 12px
@@ -27,19 +30,24 @@
     background-color: lighten($contrast-color, 5%)
 
   &> div
-    margin: 10px
+    margin: 6px
 
 #bows-messages
   flex-grow: 1
+  -webkit-flex-grow: 1
 
   overflow-x: auto
   overflow-y: scroll
 
-  p
+  .bows-message
     margin: 0
+
+  .bows-time
+    color: $discreet-color
 
 #bows-input
   flex: 0 0 50px
+  -webkit-flex: 0 0 50px
 
   background-color: transparent
   border: none
@@ -47,3 +55,5 @@
 
   font-family: sans-serif
   font-size: 1.2em
+
+  resize: none
