@@ -1,3 +1,6 @@
 : foreach src/*.coffee |> coffee -bp %f > %o |> build/%B.js
 : build/*.js |> browserify build/main.js -s bows -o %o |> dist/bows.js
 : dist/bows.js |> uglifyjs -mo %o %f |> dist/bows.min.js
+
+export GEM_HOME
+: style/*.sass |> sass -C --sourcemap=none -t compressed style/main.sass %o |> dist/bows.css
