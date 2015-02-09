@@ -3,20 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Browser on Web Sockets</title>
+
+  <title>Browser on WebSockets</title>
+
   <style>
   html, body {
     height: 100%;
     margin: 0;
     padding: 0;
   }
-  #bows {
+
+  #bows-root {
     height: 100%
   }
   </style>
+
+  <link rel="stylesheet" href="dist/bows.css">
 </head>
 <body>
-  <div id="bows">
+  <div id="bows-root">
     <p>
       <strong>Loading application...</strong>
       This message should disappear in a few milliseconds.
@@ -37,7 +42,7 @@
   <script src="dist/bows.js"></script>
   <script>
   bows.setup({
-    "url": "ws://127.0.0.1:7169"
+    "server_url": "ws://127.0.0.1:7169"
   });
   </script>
 </body>
