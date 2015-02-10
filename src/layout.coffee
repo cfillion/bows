@@ -34,11 +34,14 @@ class Layout extends EventEmitter
     switch keyCode
       when 13
         @emit 'input', @input.value
-        @input.value = ''
       else
         return true
 
     return false
+
+  clearInput: ->
+    @input.value = ''
+    return
 
   addMessage: (serializedMessage) ->
     timeNode = document.createTextNode Utils.currentTimeString()

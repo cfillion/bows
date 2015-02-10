@@ -2,6 +2,8 @@ EventEmitter = require './event_emitter'
 
 class Input extends EventEmitter
   process: (input) ->
+    return if input.length < 1
+
     if input[0] == '/'
       input = input.substring 1
       parts = input.split "\x20"
@@ -13,6 +15,7 @@ class Input extends EventEmitter
     return
 
   processCommand: (cmd, args) ->
+    # TODO: do something with cmd instead of sending it raw to the server
     @emit 'send', cmd, args
     return
 
