@@ -28,6 +28,9 @@ class Message
       !Utils.contains(string, PART_SEPARATOR)
 
   constructor: (cmd, args = []) ->
+    unless Utils.isArray args
+      args = [args]
+
     @command = cmd
     @arguments = args
 

@@ -8,7 +8,7 @@ module.exports =
     socket = new Socket config['server_url']
     ui = new Layout
 
-    input.on 'send', (m) -> socket.send m
+    input.on 'send', (m, a) -> socket.send m, a
     socket.on 'message', (m) -> ui.addMessage m
     ui.on 'input', (m) -> input.process m
 
