@@ -19,4 +19,13 @@ Utils =
   nodeSeparator: ->
     document.createTextNode "\x20"
 
+  isString: (variable) ->
+    typeof variable == 'string'
+
+  isArray: (variable) ->
+    Array.isArray variable
+
+  contains: (string, search) ->
+    string.indexOf(search) != -1
+
 module.exports = Utils
