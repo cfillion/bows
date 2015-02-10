@@ -7,6 +7,6 @@ module.exports =
     socket = new Socket config['server_url']
 
     socket.on 'message', (m) -> ui.addMessage m
-    ui.on 'send', (m) -> socket.send m
+    ui.on 'input', (m) -> socket.send m
 
     return

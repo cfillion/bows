@@ -1,19 +1,19 @@
 EventEmitter = require './event_emitter'
 
 class Socket extends EventEmitter
-  constructor: (server_url) ->
-    @server_url = server_url
+  constructor: (serverUrl) ->
+    @serverUrl = serverUrl
 
-    @socket = new WebSocket server_url
+    @socket = new WebSocket serverUrl
     @socket.onopen = => @onopen()
     @socket.onmessage = (event) => @onmessage event.data
 
   onopen: ->
     @socket.send 'hello world'
     return
-  
-  onmessage: (serialized_message) ->
-    @emit 'message', serialized_message
+
+  onmessage: (serializedMessage) ->
+    @emit 'message', serializedMessage
     return
 
   send: (message) ->
