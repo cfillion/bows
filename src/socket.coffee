@@ -1,5 +1,6 @@
 EventEmitter = require './event_emitter'
-Message = require './message'
+
+Command = require './command'
 Utils = require './utils'
 
 class Socket extends EventEmitter
@@ -14,22 +15,22 @@ class Socket extends EventEmitter
     @socket.send 'hello world'
     return
 
-  onmessage: (serializedMessages) ->
-    messages = Message.unserialize serializedMessages
+  onmessage: (text) ->
+    commands = Command.unserialize text
 
-    for message in messages
-      @emit 'message', message
+    for command in commands
+      @emit 'command', command
 
     return
 
-  send: (messages, args = []) ->
-    if Utils.isString messages
-      messages = new Message messages, args
+  send: (commands, args = []) ->
+    if Utils.isString commands
+      commands = new Command commands, args
 
-    unless Utils.isArray messages
-      messages = [messages]
+    unless Utils.isArray commands
+      commands = [commands]
 
-    @socket.send Message.serialize(messages)
+    @socket.send Command.serialize(commands)
     return
 
 module.exports = Socket

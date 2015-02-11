@@ -12,7 +12,7 @@ module.exports =
       socket.send m, a
       ui.clearInput()
 
-    socket.on 'message', (m) -> ui.addMessage m
+    socket.on 'command', (c) -> ui.addMessage c # TODO: execute the command
     ui.on 'input', (m) -> input.process m
 
     return

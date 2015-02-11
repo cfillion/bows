@@ -14,9 +14,9 @@ class Input extends EventEmitter
 
     return
 
-  processCommand: (cmd, args) ->
+  processCommand: (cmdName, args) ->
     # TODO: do something with cmd instead of sending it raw to the server
-    @emit 'send', cmd, args
+    @emit 'send', cmdName, args
     return
 
   processMessage: (text) ->
