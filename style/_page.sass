@@ -1,0 +1,36 @@
+.bows-messages
+  flex-grow: 1
+  -webkit-flex-grow: 1
+
+  overflow-x: auto
+  overflow-y: scroll
+
+  text-shadow: 1px 1px darken($main-background, 5%)
+
+.bows-message
+  margin: 0
+
+.bows-time
+  color: $dark-foreground
+
+@for $i from 0 through $msg-color-count - 1
+  .bows-color#{$i + 1}
+    $color: adjust-hue($light-foreground, $i * $msg-color-jump)
+
+    @while luma($color) < $msg-min-luma
+      $color: lighten($color, 5%)
+
+    color: $color
+
+.bows-input
+  flex: 0 0 50px
+  -webkit-flex: 0 0 50px
+
+  background-color: transparent
+  border: none
+  color: $main-foreground
+
+  font-family: $main-font
+  font-size: 1.2em
+
+  resize: none

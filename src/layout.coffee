@@ -1,5 +1,8 @@
 EventEmitter = require './event_emitter'
+
 Utils = require './utils'
+TabBar = require './tabbar'
+
 hash = require 'string-hash'
 
 MSG_COLOR_COUNT = 36
@@ -8,43 +11,21 @@ class Layout extends EventEmitter
   constructor: ->
     @root = document.getElementById 'bows-root'
     @clearNode @root
+
+    @tabbar = new TabBar
+    @root.appendChild @tabbar.node
+
+    @tabbar.addTab 'Hello World'
+    @tabbar.addTab 'LuCiE'
+    @tabbar.addTab 'news'
+    @tabbar.setCurrentTab 0
     
-    @createTabbar()
     @createMessages()
     @createInput()
 
   clearNode: (node) ->
     while last_child = node.lastChild
       node.removeChild last_child
-    return
-
-  createTabbar: ->
-    @tabbar = document.createElement 'div'
-    @tabbar.className = 'bows-tabbar'
-
-    tab = document.createElement 'span'
-    tab.className = 'bows-tab-button bows-active'
-    tab.appendChild document.createTextNode('Hello World')
-
-    close = document.createElement 'span'
-    close.className = 'bows-close'
-    close.appendChild document.createTextNode("\u00D7")
-    tab.appendChild Utils.nodeSeparator()
-    tab.appendChild close
-
-    @tabbar.appendChild tab
-
-    tab2 = document.createElement 'span'
-    tab2.appendChild document.createTextNode('LuCiE')
-    tab2.className = 'bows-tab-button'
-    @tabbar.appendChild tab2
-
-    tab3 = document.createElement 'span'
-    tab3.className = 'bows-tab-button'
-    tab3.appendChild document.createTextNode('news')
-    @tabbar.appendChild tab3
-
-    @root.appendChild @tabbar
     return
 
   createMessages: ->
