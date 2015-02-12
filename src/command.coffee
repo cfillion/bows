@@ -49,4 +49,7 @@ class Command
 
     parts.join "\x20"
 
+  argument: (index) ->
+    @arguments[index] || ''
+
 module.exports = Command

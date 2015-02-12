@@ -10,9 +10,10 @@ class Socket extends EventEmitter
     @socket = new WebSocket serverUrl
     @socket.onopen = => @onopen()
     @socket.onmessage = (event) => @onmessage event.data
+    @socket.onclose = => @onclose()
 
   onopen: ->
-    @socket.send 'hello world'
+    @send 'msg', 'hello'
     return
 
   onmessage: (text) ->
@@ -21,6 +22,9 @@ class Socket extends EventEmitter
     for command in commands
       @emit 'command', command
 
+    return
+
+  onclose: ->
     return
 
   send: (commands, args = []) ->

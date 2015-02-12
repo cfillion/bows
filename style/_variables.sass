@@ -1,4 +1,13 @@
+$main-font: sans-serif
+
 $main-background: #222
-$main-color: #fefefe
-$contrast-color: #246662
-$discreet-color: #777
+$light-background: lighten(#222, 30%)
+
+$main-foreground: #fefefe
+$contrast-foreground: #246662
+$discreet-foreground: #777
+$light-foreground: saturate($light-background, 70%)
+
+$msg-color-count: 42
+$msg-color-jump: 360 / $msg-color-count
+$msg-min-luma: 0.3

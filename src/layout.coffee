@@ -1,5 +1,8 @@
 EventEmitter = require './event_emitter'
 Utils = require './utils'
+hash = require 'string-hash'
+
+MSG_COLOR_COUNT = 36
 
 class Layout extends EventEmitter
   constructor: ->
@@ -43,19 +46,40 @@ class Layout extends EventEmitter
     @input.value = ''
     return
 
-  addMessage: (serializedMessage) ->
-    timeNode = document.createTextNode Utils.currentTimeString()
-    textNode = document.createTextNode serializedMessage
+  addMessage: (command) ->
+    time = Utils.currentTimeString()
+    nick = command.argument 0
+    text = command.argument 1
+
+    colorId = hash(nick) % MSG_COLOR_COUNT
+
+    timeNode = document.createTextNode time
+    nickNode = document.createTextNode nick
+    nickSuffix = document.createTextNode ':'
+    textNode = document.createTextNode text
 
     timeContainer = document.createElement 'span'
     timeContainer.className = 'bows-time'
     timeContainer.appendChild timeNode
 
+    nickContainer = document.createElement 'span'
+    nickContainer.className = 'bows-nick'
+    nickContainer.appendChild nickNode
+
+    textContainer = document.createElement 'span'
+    textContainer.className = 'bows-text'
+    textContainer.appendChild textNode
+
     container = document.createElement 'p'
-    container.className = 'bows-message'
+    container.className = "bows-message bows-color#{colorId + 1}"
     container.appendChild timeContainer
+
     container.appendChild Utils.nodeSeparator()
-    container.appendChild textNode
+    container.appendChild nickContainer
+    container.appendChild nickSuffix
+    container.appendChild Utils.nodeSeparator()
+
+    container.appendChild textContainer
 
     @messages.appendChild container
     @scrollToBottom @messages

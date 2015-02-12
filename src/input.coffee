@@ -1,16 +1,16 @@
 EventEmitter = require './event_emitter'
 
 class Input extends EventEmitter
-  process: (input) ->
-    return if input.length < 1
+  processText: (text) ->
+    return if text.length < 1
 
-    if input[0] == '/'
-      input = input.substring 1
-      parts = input.split "\x20"
+    if text[0] == '/'
+      text = text.substring 1
+      parts = text.split "\x20"
 
       @processCommand parts.shift(), parts
     else
-      @processMessage input
+      @processMessage text
 
     return
 

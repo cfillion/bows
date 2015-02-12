@@ -1,0 +1,11 @@
+{
+  "name": "bows",
+  "version": "0.0.1",
+  "dependencies": {
+    "string-hash": "^1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "install": "tup"
+  }
+}
