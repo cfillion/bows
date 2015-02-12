@@ -1,0 +1,25 @@
+@mixin box
+  border-radius: 10px
+  box-shadow: inset 0 0 6px black
+
+@mixin button
+  border-radius: 3px
+  cursor: pointer
+  padding: 1px 10px 1px 10px
+
+  &:active
+    box-shadow: inset 0 0 5px black
+
+@mixin button-mini
+
+@mixin button-active
+  background-color: $bright-background
+  background: linear-gradient(lighten($bright-background, 15%), darken($bright-background, 10%))
+
+@mixin button-danger
+  background-color: $danger-background
+  background: linear-gradient(lighten($danger-background, 10%), darken($danger-background, 10%))
+
+@mixin button-dark
+  background-color: $dark-background
+  background: linear-gradient($dark-background, darken($dark-background, 5%))

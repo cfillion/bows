@@ -9,6 +9,7 @@ class Layout extends EventEmitter
     @root = document.getElementById 'bows-root'
     @clearNode @root
     
+    @createTabbar()
     @createMessages()
     @createInput()
 
@@ -17,16 +18,45 @@ class Layout extends EventEmitter
       node.removeChild last_child
     return
 
+  createTabbar: ->
+    @tabbar = document.createElement 'div'
+    @tabbar.className = 'bows-tabbar'
+
+    tab = document.createElement 'span'
+    tab.className = 'bows-tab-button bows-active'
+    tab.appendChild document.createTextNode('Hello World')
+
+    close = document.createElement 'span'
+    close.className = 'bows-close'
+    close.appendChild document.createTextNode("\u00D7")
+    tab.appendChild Utils.nodeSeparator()
+    tab.appendChild close
+
+    @tabbar.appendChild tab
+
+    tab2 = document.createElement 'span'
+    tab2.appendChild document.createTextNode('LuCiE')
+    tab2.className = 'bows-tab-button'
+    @tabbar.appendChild tab2
+
+    tab3 = document.createElement 'span'
+    tab3.className = 'bows-tab-button'
+    tab3.appendChild document.createTextNode('news')
+    @tabbar.appendChild tab3
+
+    @root.appendChild @tabbar
+    return
+
   createMessages: ->
     @messages = document.createElement 'div'
-    @messages.id = 'bows-messages'
+    @messages.className = 'bows-messages'
 
     @root.appendChild @messages
     return
 
   createInput: ->
     @input = document.createElement 'textarea'
-    @input.id = 'bows-input'
+    @input.className = 'bows-input'
     @input.placeholder = 'Type your message here...'
     @input.onkeypress = (event) => @handleInput event.keyCode
 
