@@ -1,103 +1,57 @@
 EventEmitter = require './event_emitter'
 
-Utils = require './utils'
+Page = require './page'
 TabBar = require './tabbar'
-
-hash = require 'string-hash'
-
-MSG_COLOR_COUNT = 36
+Utils = require './utils'
 
 class Layout extends EventEmitter
   constructor: ->
+    @pages = []
+    @currentIndex = -1
+
     @root = document.getElementById 'bows-root'
-    @clearNode @root
+    Utils.clearNode @root
 
     @tabbar = new TabBar
     @root.appendChild @tabbar.node
 
-    @tabbar.addTab 'Hello World'
-    @tabbar.addTab 'LuCiE'
-    @tabbar.addTab 'news'
-    @tabbar.setCurrentTab 0
-    
-    @createMessages()
-    @createInput()
+    @tabbar.on 'currentChanged', (newIndex) =>
+      if oldPage = @pages[@currentIndex]
+        Utils.removeClass 'bows-current', oldPage.node
 
-  clearNode: (node) ->
-    while last_child = node.lastChild
-      node.removeChild last_child
-    return
+      @currentIndex = newIndex
+      Utils.addClass 'bows-current', @pages[newIndex].node
 
-  createMessages: ->
-    @messages = document.createElement 'div'
-    @messages.className = 'bows-messages'
+    @container = document.createElement 'div'
+    @container.className = 'bows-container'
+    @root.appendChild @container
 
-    @root.appendChild @messages
-    return
+  findPage: (identifier) ->
+    for page in @pages
+      return page if page.identifier == identifier
 
-  createInput: ->
-    @input = document.createElement 'textarea'
-    @input.className = 'bows-input'
-    @input.placeholder = 'Type your message here...'
-    @input.onkeypress = (event) => @handleInput event.keyCode
+    undefined
 
-    @root.appendChild @input
-    return
+  createPage: (identifier) ->
+    return page if page = @findPage(identifier)
 
-  handleInput: (keyCode) ->
-    switch keyCode
-      when 13
-        @emit 'input', @input.value
-      else
-        return true
+    page = new Page identifier
+    @addPage page
 
-    return false
+    page
 
-  clearInput: ->
-    @input.value = ''
-    return
+  addPage: (page) ->
+    index = @tabbar.addTab page.name
 
-  addMessage: (command) ->
-    time = Utils.currentTimeString()
-    nick = command.argument 0
-    text = command.argument 1
+    page.on 'nameChanged', (newName) ->
+      @tabbar.renameTab index, newName
 
-    colorId = hash(nick) % MSG_COLOR_COUNT
+    @pages.push page
+    @container.appendChild page.node
 
-    timeNode = document.createTextNode time
-    nickNode = document.createTextNode nick
-    nickSuffix = document.createTextNode ':'
-    textNode = document.createTextNode text
+    index
 
-    timeContainer = document.createElement 'span'
-    timeContainer.className = 'bows-time'
-    timeContainer.appendChild timeNode
-
-    nickContainer = document.createElement 'span'
-    nickContainer.className = 'bows-nick'
-    nickContainer.appendChild nickNode
-
-    textContainer = document.createElement 'span'
-    textContainer.className = 'bows-text'
-    textContainer.appendChild textNode
-
-    container = document.createElement 'p'
-    container.className = "bows-message bows-color#{colorId + 1}"
-    container.appendChild timeContainer
-
-    container.appendChild Utils.nodeSeparator()
-    container.appendChild nickContainer
-    container.appendChild nickSuffix
-    container.appendChild Utils.nodeSeparator()
-
-    container.appendChild textContainer
-
-    @messages.appendChild container
-    @scrollToBottom @messages
-    return
-
-  scrollToBottom: (node) ->
-    node.scrollTop = node.scrollHeight
-    return
+  setCurrentPage: (index) ->
+    @tabbar.setCurrentTab index
 
 module.exports = Layout

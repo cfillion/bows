@@ -1,3 +1,16 @@
+.bows-container, .bows-page
+  @include vlayout
+
+  flex-grow: 1
+  -webkit-flex-grow: 1
+
+  // fix for a Firefox 34-35 bug
+     http://stackoverflow.com/questions/27424831/firefox-flexbox-overflow
+  min-height: 1px
+
+.bows-page:not(.bows-current)
+  display: none
+
 .bows-messages
   flex-grow: 1
   -webkit-flex-grow: 1

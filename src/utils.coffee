@@ -40,6 +40,8 @@ Utils =
     else
       node.className = klass
 
+    return
+
   removeClass: (klass, node) ->
     klasses = node.className.split "\x20"
     index = klasses.indexOf(klass)
@@ -48,5 +50,13 @@ Utils =
       klasses.splice index, 1
 
     node.className = klasses.join "\x20"
+
+    return
+
+  clearNode: (node) ->
+    while last_child = node.lastChild
+      node.removeChild last_child
+
+    return
 
 module.exports = Utils

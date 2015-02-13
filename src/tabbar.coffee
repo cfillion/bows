@@ -1,30 +1,27 @@
+EventEmitter = require './event_emitter'
+
 Utils = require './utils'
 
-CLASS_TABBAR = 'bows-tabbar'
-CLASS_TABBUTTON = 'bows-tab-button'
-CLASS_CURRENT = 'bows-current'
-
-class TabBar
+class TabBar extends EventEmitter
   constructor: ->
-    @node = document.createElement 'div'
-    @node.className = 'bows-tabbar'
-
     @buttons = []
     @currentIndex = -1
+
+    @node = document.createElement 'div'
+    @node.className = 'bows-tabbar'
 
   addTab: (name) ->
     index = @buttons.length
 
     btn = document.createElement 'span'
     btn.className = 'bows-tab-button'
-    btn.appendChild document.createTextNode(name)
-    btn.appendChild Utils.nodeSeparator()
-    btn.appendChild Utils.closeButton()
 
     btn.onclick = => @setCurrentTab index
 
     @buttons.push btn
     @node.appendChild btn
+
+    @renameTab index, name
 
     index
   
@@ -34,10 +31,29 @@ class TabBar
     if oldCurrent = @buttons[@currentIndex]
       Utils.removeClass 'bows-current', oldCurrent
 
-    Utils.addClass CLASS_CURRENT, btn
+    Utils.addClass 'bows-current', btn
+
     @currentIndex = index
+    @emit 'currentChanged', index
 
     return
+
+  renameTab: (index, newName) ->
+    return unless btn = @buttons[index]
+
+    Utils.clearNode btn
+
+    closeButton = Utils.closeButton()
+    closeButton.onclick = => @closeTab index
+
+    btn.appendChild document.createTextNode(newName)
+    btn.appendChild Utils.nodeSeparator()
+    btn.appendChild closeButton
+
+    return
+
+  closeTab: (index) ->
+    alert "closing tab #{index}"
 
 
 module.exports = TabBar
