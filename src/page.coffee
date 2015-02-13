@@ -8,15 +8,12 @@ MSG_COLOR_COUNT = 36
 
 class Page extends EventEmitter
   constructor: (identifier) ->
-    @node = document.createElement 'div'
-    @node.className = 'bows-page'
+    @node = Utils.createNode 'div', 'page'
 
-    @messages = document.createElement 'div'
-    @messages.className = 'bows-messages'
+    @messages = Utils.createNode 'div', 'messages'
     @node.appendChild @messages
 
-    @input = document.createElement 'textarea'
-    @input.className = 'bows-input'
+    @input = Utils.createNode 'textarea', 'input'
     @input.placeholder = 'Type your message here...'
     @input.onkeypress = (event) => @handleInput event.keyCode
     @node.appendChild @input
@@ -56,20 +53,16 @@ class Page extends EventEmitter
     nickSuffix = document.createTextNode ':'
     textNode = document.createTextNode text
 
-    timeContainer = document.createElement 'span'
-    timeContainer.className = 'bows-time'
+    timeContainer = Utils.createNode 'span', 'time'
     timeContainer.appendChild timeNode
 
-    nickContainer = document.createElement 'span'
-    nickContainer.className = 'bows-nick'
+    nickContainer = Utils.createNode 'span', 'nick'
     nickContainer.appendChild nickNode
 
-    textContainer = document.createElement 'span'
-    textContainer.className = 'bows-text'
+    textContainer = Utils.createNode 'span', 'text'
     textContainer.appendChild textNode
 
-    container = document.createElement 'p'
-    container.className = "bows-message bows-color#{colorId + 1}"
+    container = Utils.createNode 'p', ['message', "color#{colorId + 1}"]
     container.appendChild timeContainer
 
     container.appendChild Utils.nodeSeparator()

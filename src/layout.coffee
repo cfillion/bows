@@ -9,7 +9,7 @@ class Layout extends EventEmitter
     @pages = []
     @currentIndex = -1
 
-    @root = document.getElementById 'bows-root'
+    @root = document.getElementById Utils.prefix('root')
     Utils.clearNode @root
 
     @tabbar = new TabBar
@@ -17,13 +17,12 @@ class Layout extends EventEmitter
 
     @tabbar.on 'currentChanged', (newIndex) =>
       if oldPage = @pages[@currentIndex]
-        Utils.removeClass 'bows-current', oldPage.node
+        Utils.removeClass 'current', oldPage.node
 
       @currentIndex = newIndex
-      Utils.addClass 'bows-current', @pages[newIndex].node
+      Utils.addClass 'current', @pages[newIndex].node
 
-    @container = document.createElement 'div'
-    @container.className = 'bows-container'
+    @container = Utils.createNode 'div', 'container'
     @root.appendChild @container
 
   findPage: (identifier) ->

@@ -1,11 +1,18 @@
-.bows-tab-button
+.#{$prefix}tab-button
   @include button
   @include button-dark
 
   flex: 1 0 auto
   -webkit-flex: 1 0 auto
 
-  display: inline-block
+  @include hlayout
+
+  justify-content: space-between
+  -webkit-justify-content: space-between
+
+  align-items: center
+  -webkit-align-items: center
+
   list-style-type: none
   border-radius: 0
 
@@ -20,28 +27,21 @@
     border-top-right-radius: 10px
     border-bottom-right-radius: 10px
 
-  &.bows-current
+  &.#{$prefix}current
     @include button-active
-
-    text-align: center
 
     &:active
       box-shadow: none
 
-  &:not(.bows-current) .bows-close
+  &:not(.#{$prefix}current) .#{$prefix}close
     display: none
 
-.bows-tabbar
+.#{$prefix}tabbar
   @include box
-
-  display: flex
-  display: -webkit-flex
+  @include hlayout
 
   flex-wrap: wrap
   -webkit-flex-wrap: wrap
 
   padding: 1px
   font-size: 1.1em
-
-  flex-shrink: 0
-  -webkit-flex-shrink: 0

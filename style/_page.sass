@@ -1,4 +1,4 @@
-.bows-container, .bows-page
+.#{$prefix}container, .#{$prefix}page
   @include vlayout
 
   flex-grow: 1
@@ -8,10 +8,10 @@
      http://stackoverflow.com/questions/27424831/firefox-flexbox-overflow
   min-height: 1px
 
-.bows-page:not(.bows-current)
+.#{$prefix}page:not(.#{$prefix}current)
   display: none
 
-.bows-messages
+.#{$prefix}messages
   flex-grow: 1
   -webkit-flex-grow: 1
 
@@ -20,14 +20,14 @@
 
   text-shadow: 1px 1px darken($main-background, 5%)
 
-.bows-message
+.#{$prefix}message
   margin: 0
 
-.bows-time
+.#{$prefix}time
   color: $dark-foreground
 
 @for $i from 0 through $msg-color-count - 1
-  .bows-color#{$i + 1}
+  .#{$prefix}color#{$i + 1}
     $color: adjust-hue($light-foreground, $i * $msg-color-jump)
 
     @while luma($color) < $msg-min-luma
@@ -35,7 +35,7 @@
 
     color: $color
 
-.bows-input
+.#{$prefix}input
   flex: 0 0 50px
   -webkit-flex: 0 0 50px
 

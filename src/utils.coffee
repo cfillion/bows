@@ -28,13 +28,12 @@ Utils =
   contains: (string, search) ->
     string.indexOf(search) != -1
 
-  closeButton: ->
-    button = document.createElement 'span'
-    button.className = 'bows-close'
-    button.appendChild document.createTextNode("\u00D7")
-    button
+  prefix: (identifier) ->
+    "bows-#{identifier}"
 
   addClass: (klass, node) ->
+    klass = @prefix klass
+
     if node.className
       node.className += "\x20#{klass}"
     else
@@ -43,6 +42,8 @@ Utils =
     return
 
   removeClass: (klass, node) ->
+    klass = @prefix klass
+
     klasses = node.className.split "\x20"
     index = klasses.indexOf(klass)
 
@@ -53,10 +54,23 @@ Utils =
 
     return
 
+  createNode: (type, klasses = []) ->
+    klasses = [klasses] unless @isArray klasses
+
+    node = document.createElement type
+    @addClass klass, node for klass in klasses
+
+    node
+
   clearNode: (node) ->
     while last_child = node.lastChild
       node.removeChild last_child
 
     return
+
+  closeButton: ->
+    button = @createNode 'span', 'close'
+    button.appendChild document.createTextNode("\u00D7")
+    button
 
 module.exports = Utils

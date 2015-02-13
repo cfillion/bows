@@ -5,20 +5,28 @@ Utils = require './utils'
 class TabBar extends EventEmitter
   constructor: ->
     @buttons = []
+    @labels = []
     @currentIndex = -1
 
-    @node = document.createElement 'div'
-    @node.className = 'bows-tabbar'
+    @node = Utils.createNode 'div', 'tabbar'
 
   addTab: (name) ->
     index = @buttons.length
 
-    btn = document.createElement 'span'
-    btn.className = 'bows-tab-button'
+    closeButton = Utils.closeButton()
+    closeButton.onclick = => @closeTab index
+
+    label = Utils.createNode 'span'
+
+    btn = Utils.createNode 'span', 'tab-button'
+    btn.appendChild label
+    btn.appendChild Utils.nodeSeparator()
+    btn.appendChild closeButton
 
     btn.onclick = => @setCurrentTab index
 
     @buttons.push btn
+    @labels.push label
     @node.appendChild btn
 
     @renameTab index, name
@@ -29,9 +37,9 @@ class TabBar extends EventEmitter
     return unless btn = @buttons[index]
 
     if oldCurrent = @buttons[@currentIndex]
-      Utils.removeClass 'bows-current', oldCurrent
+      Utils.removeClass 'current', oldCurrent
 
-    Utils.addClass 'bows-current', btn
+    Utils.addClass 'current', btn
 
     @currentIndex = index
     @emit 'currentChanged', index
@@ -39,16 +47,10 @@ class TabBar extends EventEmitter
     return
 
   renameTab: (index, newName) ->
-    return unless btn = @buttons[index]
+    return unless label = @labels[index]
 
-    Utils.clearNode btn
-
-    closeButton = Utils.closeButton()
-    closeButton.onclick = => @closeTab index
-
-    btn.appendChild document.createTextNode(newName)
-    btn.appendChild Utils.nodeSeparator()
-    btn.appendChild closeButton
+    Utils.clearNode label
+    label.appendChild document.createTextNode(newName)
 
     return
 

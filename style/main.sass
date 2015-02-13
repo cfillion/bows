@@ -1,8 +1,10 @@
+$prefix: bows-
+
 @import variables
 @import functions
 @import mixins
 
-#bows-root
+##{$prefix}root
   background-color: $main-background
   text-rendering: optimizeLegibility
 
@@ -31,7 +33,7 @@
     &:first-child
       margin-top: 6px
 
-.bows-close
+.#{$prefix}close
   @include button
   @include button-danger
 

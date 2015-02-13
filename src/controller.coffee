@@ -34,7 +34,7 @@ class Controller
 
   serverCommands: (command) ->
     switch command.name
-      when 'msg' then @ui.createPage('#hello_world').addMessage command
+      when 'msg' then @ui.createPage(command.argument 1).addMessage command
       else alert 'invalid command received!'
 
 module.exports = Controller

@@ -5,6 +5,10 @@
   flex-direction: column
   -webkit-flex-direction: column
 
+@mixin hlayout
+  display: flex
+  display: -webkit-flex
+
 @mixin box
   border-radius: 10px
   box-shadow: inset 0 0 6px black
@@ -16,8 +20,6 @@
 
   &:active
     box-shadow: inset 0 0 5px black
-
-@mixin button-mini
 
 @mixin button-active
   background-color: $bright-background
