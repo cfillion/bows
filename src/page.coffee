@@ -16,10 +16,13 @@ class Page extends EventEmitter
     @input = Utils.createNode 'textarea', 'input'
     @input.placeholder = 'Type your message here...'
     @input.onkeypress = (event) => @handleInput event.keyCode
+
     @node.appendChild @input
 
     @identifier = identifier
     @setName identifier
+
+    @alertCount = 0
 
   setName: (newName) ->
     @name = newName
@@ -74,10 +77,22 @@ class Page extends EventEmitter
 
     @messages.appendChild container
     @scrollToBottom @messages
+    @alert()
+
     return
 
   scrollToBottom: (node) ->
     node.scrollTop = node.scrollHeight
+    return
+
+  alert: ->
+    @emit 'alertCountChanged', ++@alertCount
+    return
+
+  resetAlerts: ->
+    @alertCount = -1
+    @alert()
+
     return
 
 module.exports = Page

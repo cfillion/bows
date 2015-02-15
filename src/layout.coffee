@@ -19,8 +19,11 @@ class Layout extends EventEmitter
       if oldPage = @pages[@currentIndex]
         Utils.removeClass 'current', oldPage.node
 
-      @currentIndex = newIndex
       Utils.addClass 'current', @pages[newIndex].node
+      @pages[newIndex].resetAlerts()
+
+      @currentIndex = newIndex
+      return
 
     @container = Utils.createNode 'div', 'container'
     @root.appendChild @container
@@ -42,8 +45,13 @@ class Layout extends EventEmitter
   addPage: (page) ->
     index = @tabbar.addTab page.name
 
-    page.on 'nameChanged', (newName) ->
+    page.on 'nameChanged', (newName) =>
       @tabbar.renameTab index, newName
+      return
+
+    page.on 'alertCountChanged', (count) =>
+      @tabbar.setAlertCount index, count if index != @currentIndex
+      return
 
     @pages.push page
     @container.appendChild page.node
@@ -52,5 +60,6 @@ class Layout extends EventEmitter
 
   setCurrentPage: (index) ->
     @tabbar.setCurrentTab index
+    return
 
 module.exports = Layout

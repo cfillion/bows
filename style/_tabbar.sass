@@ -13,7 +13,6 @@
   align-items: center
   -webkit-align-items: center
 
-  list-style-type: none
   border-radius: 0
 
   &:first-child
@@ -35,6 +34,20 @@
 
   &:not(.#{$prefix}current) .#{$prefix}close
     display: none
+
+  .#{$prefix}alert
+    color: $danger-background
+    font-weight: bold
+    font-size: 0.8em
+
+    &:before
+      content: "("
+
+    &:after
+      content: ")"
+
+    &:empty
+      display: none
 
 .#{$prefix}tabbar
   @include box

@@ -6,6 +6,8 @@ class TabBar extends EventEmitter
   constructor: ->
     @buttons = []
     @labels = []
+    @alerts = []
+
     @currentIndex = -1
 
     @node = Utils.createNode 'div', 'tabbar'
@@ -16,20 +18,25 @@ class TabBar extends EventEmitter
     closeButton = Utils.closeButton()
     closeButton.onclick = => @closeTab index
 
-    label = Utils.createNode 'span'
+    label = Utils.createNode 'span', 'label'
+    alert = Utils.createNode 'span', 'alert'
 
     btn = Utils.createNode 'span', 'tab-button'
     btn.appendChild label
+    btn.appendChild Utils.nodeSeparator()
+    btn.appendChild alert
     btn.appendChild Utils.nodeSeparator()
     btn.appendChild closeButton
 
     btn.onclick = => @setCurrentTab index
 
-    @buttons.push btn
     @labels.push label
-    @node.appendChild btn
+    @alerts.push alert
+    @buttons.push btn
 
     @renameTab index, name
+
+    @node.appendChild btn
 
     index
   
@@ -54,8 +61,16 @@ class TabBar extends EventEmitter
 
     return
 
+  setAlertCount: (index, count) ->
+    return unless alert = @alerts[index]
+
+    Utils.clearNode alert
+    alert.appendChild document.createTextNode(count) if count > 0
+
+    return
+
   closeTab: (index) ->
     alert "closing tab #{index}"
-
+    return
 
 module.exports = TabBar
