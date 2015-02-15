@@ -16,13 +16,11 @@ class Layout extends EventEmitter
     @root.appendChild @tabbar.node
 
     @tabbar.on 'currentChanged', (newIndex) =>
-      if oldPage = @pages[@currentIndex]
-        Utils.removeClass 'current', oldPage.node
+      @currentTabChanged newIndex
+      return
 
-      Utils.addClass 'current', @pages[newIndex].node
-      @pages[newIndex].resetAlerts()
-
-      @currentIndex = newIndex
+    @tabbar.on 'closeRequested', (index) =>
+      @closePage index
       return
 
     @container = Utils.createNode 'div', 'container'
@@ -30,7 +28,7 @@ class Layout extends EventEmitter
 
   findPage: (identifier) ->
     for page in @pages
-      return page if page.identifier == identifier
+      return page if page && page.identifier == identifier
 
     undefined
 
@@ -61,5 +59,37 @@ class Layout extends EventEmitter
   setCurrentPage: (index) ->
     @tabbar.setCurrentTab index
     return
+
+  currentTabChanged: (newIndex) ->
+    if oldPage = @pages[@currentIndex]
+      Utils.removeClass 'current', oldPage.node
+
+    Utils.addClass 'current', @pages[newIndex].node
+    @pages[newIndex].resetAlerts()
+
+    @currentIndex = newIndex
+    return
+
+  closePage: (index) ->
+    return unless page = @pages[index]
+
+    @tabbar.removeTab index
+    @container.removeChild page.node
+
+    # don't resize the array
+    @pages[index] = false
+
+    @emit 'pageClosed', page
+
+    newIndex = @findNeighbour(index)
+    @setCurrentPage newIndex unless newIndex == undefined
+
+    return
+
+  findNeighbour: (index) ->
+    for testIndex in [index-1..0]
+      return testIndex if @pages[testIndex]
+
+    undefined
 
 module.exports = Layout

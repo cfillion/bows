@@ -4,16 +4,13 @@ Utils = require './utils'
 
 class TabBar extends EventEmitter
   constructor: ->
-    @buttons = []
-    @labels = []
-    @alerts = []
-
+    @tabs = []
     @currentIndex = -1
 
     @node = Utils.createNode 'div', 'tabbar'
 
   addTab: (name) ->
-    index = @buttons.length
+    index = @tabs.length
 
     closeButton = Utils.closeButton()
     closeButton.onclick = => @closeTab index
@@ -30,9 +27,10 @@ class TabBar extends EventEmitter
 
     btn.onclick = => @setCurrentTab index
 
-    @labels.push label
-    @alerts.push alert
-    @buttons.push btn
+    @tabs.push
+      alert: alert
+      button: btn
+      label: label
 
     @renameTab index, name
 
@@ -41,10 +39,10 @@ class TabBar extends EventEmitter
     index
   
   setCurrentTab: (index) ->
-    return unless btn = @buttons[index]
+    return unless btn = @tabs[index].button
 
-    if oldCurrent = @buttons[@currentIndex]
-      Utils.removeClass 'current', oldCurrent
+    if tab = @tabs[@currentIndex]
+      Utils.removeClass 'current', tab.button
 
     Utils.addClass 'current', btn
 
@@ -54,23 +52,33 @@ class TabBar extends EventEmitter
     return
 
   renameTab: (index, newName) ->
-    return unless label = @labels[index]
+    return unless tab = @tabs[index]
 
-    Utils.clearNode label
-    label.appendChild document.createTextNode(newName)
+    Utils.clearNode tab.label
+    tab.label.appendChild document.createTextNode(newName)
 
     return
 
   setAlertCount: (index, count) ->
-    return unless alert = @alerts[index]
+    return unless tab = @tabs[index]
 
-    Utils.clearNode alert
-    alert.appendChild document.createTextNode(count) if count > 0
+    Utils.clearNode tab.alert
+    tab.alert.appendChild document.createTextNode(count) if count > 0
 
     return
 
   closeTab: (index) ->
-    alert "closing tab #{index}"
+    @emit 'closeRequested', index
     return
+
+  removeTab: (index) ->
+    return unless tab = @tabs[index]
+
+    @node.removeChild tab.button
+
+    # don't change the other tab's indexes
+    # the onclick callbacks would still use the old index
+
+    @tabs[index] = false
 
 module.exports = TabBar
