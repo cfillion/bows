@@ -8,6 +8,9 @@
      http://stackoverflow.com/questions/27424831/firefox-flexbox-overflow
   min-height: 1px
 
+  &> div
+    margin-bottom: 6px
+
 .#{$prefix}page:not(.#{$prefix}current)
   display: none
 
@@ -42,6 +45,9 @@
   background-color: transparent
   border: none
   color: $main-foreground
+
+  @include box
+  padding: 10px
 
   font-family: $main-font
   font-size: 1.2em
