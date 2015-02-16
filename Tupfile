@@ -9,7 +9,7 @@ SASS = sass
 PREFIXER = $(NODE_BIN)/autoprefixer
 
 # source files
-: foreach src/*.coffee |> $(COFFEE) -bp %f > %o |> build/%B.js
+: foreach src/*.coffee |> ^o^ $(COFFEE) -bp %f > %o |> build/%B.js
 : build/*.js |> $(BROWSERIFY) build/main.js -s bows -p bundle-collapser/plugin \
   | $(UGLIFY) -mo %o |> dist/bows.js
 
