@@ -1,6 +1,5 @@
 .#{$prefix}tab-button
-  @include button
-  @include button-dark
+  @include button-active(static)
 
   display: flex
   flex: 1 0 auto
@@ -10,23 +9,21 @@
   border-radius: 0
   user-select: none
 
+  &:not(.#{$prefix}current)
+    @include button-dark
+    border-radius: 0
+
+    .#{$prefix}close
+      display: none
+
   &:first-child
     @include border-left-radius(10px)
 
   &:not(:last-child)
-    border-right: 1px solid black
+    border-right: 1px solid $border
 
   &:last-child
     @include border-right-radius(10px)
-
-  &.#{$prefix}current
-    @include button-active
-
-    &:active
-      box-shadow: none
-
-  &:not(.#{$prefix}current) .#{$prefix}close
-    display: none
 
   .#{$prefix}alert
     color: $danger-foreground
@@ -43,13 +40,13 @@
       display: none
 
 .#{$prefix}tabbar
-  @include box
+  border: 1px solid $border
+  border-radius: 10px
 
   display: flex
   flex: 0 0 auto
   flex-wrap: wrap
 
-  padding: 1px
   font-size: 1.1em
 
   &:empty

@@ -8,33 +8,40 @@
 
 @mixin box
   border-radius: 10px
-  box-shadow: inset 0 0 6px black
+  box-shadow: inset 0 0 6px $shadow
 
-@mixin button
+@mixin button($base, $top, $bottom, $options)
   border-radius: 3px
   cursor: pointer
   padding: 1px 10px 1px 10px
 
-  &:active
-    box-shadow: inset 0 0 5px black
+  background-color: $base
+  background: linear-gradient($top, $bottom)
 
-@mixin button-active
-  background-color: $bright-background
+  @if not index($options, 'static')
+    &:hover
+      background-color: lighten($base, 2%)
+      background: linear-gradient(lighten($top, 2%), lighten($bottom, 2%))
 
-  $from: lighten($bright-background, 15%)
-  $to: darken($bright-background, 8%)
-  background: linear-gradient($from, $to)
+    &:active
+      box-shadow: inset 0 0 5px $shadow
 
-@mixin button-danger
-  background-color: $danger-background
+@mixin button-active($options: '')
+  $base: $bright-background
+  $top: lighten($base, 15%)
+  $bottom: darken($base, 8%)
 
-  $from: lighten($danger-background, 10%)
-  $to: darken($danger-background, 10%)
-  background: linear-gradient($from, $to)
+  @include button($base, $top, $bottom, $options)
 
-@mixin button-dark
-  background-color: $dark-background
+@mixin button-danger($options: '')
+  $base: $danger-background
+  $top: lighten($base, 10%)
+  $bottom: darken($base, 10%)
 
-  $from: $dark-background
-  $to: darken($dark-background, 5%)
-  background: linear-gradient($from, $to)
+  @include button($base, $top, $bottom, $options)
+
+@mixin button-dark($options: '')
+  $base: $dark-background
+  $bottom: darken($base, 5%)
+
+  @include button($base, $base, $bottom, $options)
