@@ -77,6 +77,7 @@ class Layout extends EventEmitter
     return
 
   closePage: (index) ->
+    index = @indexOf index if index instanceof Page
     return unless page = @pages[index]
 
     @tabbar.removeTab index
@@ -99,5 +100,8 @@ class Layout extends EventEmitter
       return testIndex if @pages[testIndex]
 
     undefined
+
+  indexOf: (page) ->
+    @pages.indexOf page
 
 module.exports = Layout

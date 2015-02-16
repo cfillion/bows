@@ -1,6 +1,9 @@
 Layout = require './layout'
 Socket = require './socket'
 
+ClientCommands = require './client_commands'
+ServerCommands = require './server_commands'
+
 class Controller
   constructor: (config) ->
     @socket = new Socket config['server_url']
@@ -11,32 +14,39 @@ class Controller
 
     @ui.setCurrentPage 0
 
-    @ui.on 'input', (t, p) => @userInput t, p
-    @socket.on 'command', (c) => @serverCommands c
+    @ui.on 'input', (t, p) => @parseUserInput t, p
+    @socket.on 'command', (c) => @execServerCommand c
 
-  userInput: (text, page) ->
+  parseUserInput: (text, page) ->
     return if text.length < 1
 
     if text[0] == '/'
       text = text.substring 1
       parts = text.split "\x20"
 
-      @clientCommands parts.shift(), parts
+      command =
+        name: parts.shift()
+        arguments: parts
     else
-      @socket.send 'msg', text
+      command =
+        name: 'msg'
+        arguments: [page.identifier, text]
+
+    callback = ClientCommands[command.name]
+
+    unless callback? command.arguments, page, this
+      alert 'invalid command'
+      return false
 
     page.clearInput()
 
     return
 
-  clientCommands: (cmdName, args) ->
-    # TODO: do something with cmd instead of sending it raw to the server
-    @socket.send cmdName, args
-    return
+  execServerCommand: (command) ->
+    callback = ServerCommands[command.name]
 
-  serverCommands: (command) ->
-    switch command.name
-      when 'msg' then @ui.createPage(command.argument 1).addMessage command
-      else alert 'invalid command received!'
+    unless callback? command.arguments, this
+      alert 'unsupported command received!'
+      return false
 
 module.exports = Controller

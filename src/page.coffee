@@ -57,14 +57,10 @@ class Page extends EventEmitter
     @input.value = ''
     return
 
-  addMessage: (command) ->
-    time = Utils.currentTimeString()
-    nick = command.argument 0
-    text = command.argument 1
-
+  addMessage: (nick, text) ->
     colorId = hash(nick) % MSG_COLOR_COUNT
 
-    timeNode = document.createTextNode time
+    timeNode = document.createTextNode Utils.currentTimeString()
     nickNode = document.createTextNode nick
     nickSuffix = document.createTextNode ':'
     textNode = document.createTextNode text

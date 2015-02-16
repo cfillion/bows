@@ -13,7 +13,7 @@ class Socket extends EventEmitter
     @socket.onclose = => @onclose()
 
   onopen: ->
-    @send 'msg', 'hello'
+    @send 'msg', '#hello_world', 'hello'
     return
 
   onmessage: (text) ->
@@ -27,7 +27,7 @@ class Socket extends EventEmitter
   onclose: ->
     return
 
-  send: (commands, args = []) ->
+  send: (commands, args...) ->
     if Utils.isString commands
       commands = new Command commands, args
 
