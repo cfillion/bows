@@ -18,7 +18,7 @@ class Controller
     @socket.on 'command', (c) => @execServerCommand c
 
   parseUserInput: (text, page) ->
-    return if text.length < 1
+    return false if text.length < 1
 
     if text[0] == '/'
       text = text.substring 1

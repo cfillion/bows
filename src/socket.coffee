@@ -34,7 +34,12 @@ class Socket extends EventEmitter
     unless Utils.isArray commands
       commands = [commands]
 
-    @socket.send Command.serialize(commands)
-    return
+    text = Command.serialize commands
+
+    if text
+      @socket.send text
+      true
+    else
+      false
 
 module.exports = Socket

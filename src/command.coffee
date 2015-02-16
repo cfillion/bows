@@ -8,6 +8,7 @@ class Command
     textParts = []
 
     for command in commands
+      return false unless command.isValid()
       textParts.push command.serialize()
 
     textParts.join COMMAND_SEPARATOR
@@ -23,10 +24,6 @@ class Command
       commands.push new Command(parts.shift(), parts)
 
     commands
-
-  @isValid: (string) ->
-    !Utils.contains(string, COMMAND_SEPARATOR) &&
-      !Utils.contains(string, PART_SEPARATOR)
 
   constructor: (cmdName, args = []) ->
     unless Utils.isArray args
@@ -51,5 +48,17 @@ class Command
 
   argument: (index) ->
     @arguments[index] || ''
+
+  containsSeparators: (string) ->
+    Utils.contains(string, COMMAND_SEPARATOR) ||
+      Utils.contains(string, PART_SEPARATOR)
+
+  isValid: ->
+    return false if @containsSeparators @name
+
+    for argument in @arguments
+      return false if @containsSeparators argument
+
+    true
 
 module.exports = Command
