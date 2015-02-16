@@ -6,5 +6,5 @@ export GEM_HOME
   | uglifyjs -mo %o |> dist/bows.js
 
 # stylesheets
-: style/*.sass |> sass --no-cache --sourcemap=none -t compressed \
-  style/main.sass %o |> dist/bows.css
+: style/*.sass |> sass -C --sourcemap=none -t compressed style/main.sass \
+  | autoprefixer -o %o |> dist/bows.css

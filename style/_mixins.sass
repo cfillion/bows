@@ -1,13 +1,10 @@
-@mixin vlayout
-  display: flex
-  display: -webkit-flex
+@mixin border-left-radius($size)
+  border-top-left-radius: $size
+  border-bottom-left-radius: $size
 
-  flex-direction: column
-  -webkit-flex-direction: column
-
-@mixin hlayout
-  display: flex
-  display: -webkit-flex
+@mixin border-right-radius($size)
+  border-top-right-radius: $size
+  border-bottom-right-radius: $size
 
 @mixin box
   border-radius: 10px
@@ -23,12 +20,21 @@
 
 @mixin button-active
   background-color: $bright-background
-  background: linear-gradient(lighten($bright-background, 15%), darken($bright-background, 8%))
+
+  $from: lighten($bright-background, 15%)
+  $to: darken($bright-background, 8%)
+  background: linear-gradient($from, $to)
 
 @mixin button-danger
   background-color: $danger-background
-  background: linear-gradient(lighten($danger-background, 10%), darken($danger-background, 10%))
+
+  $from: lighten($danger-background, 10%)
+  $to: darken($danger-background, 10%)
+  background: linear-gradient($from, $to)
 
 @mixin button-dark
   background-color: $dark-background
-  background: linear-gradient($dark-background, darken($dark-background, 5%))
+
+  $from: $dark-background
+  $to: darken($dark-background, 5%)
+  background: linear-gradient($from, $to)

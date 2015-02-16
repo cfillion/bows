@@ -1,8 +1,7 @@
 .#{$prefix}container, .#{$prefix}page
-  @include vlayout
-
+  display: flex
+  flex-direction: column
   flex-grow: 1
-  -webkit-flex-grow: 1
 
   // fix for a Firefox 34-35 bug
      http://stackoverflow.com/questions/27424831/firefox-flexbox-overflow
@@ -16,7 +15,6 @@
 
 .#{$prefix}messages
   flex-grow: 1
-  -webkit-flex-grow: 1
 
   overflow-x: auto
   overflow-y: scroll
@@ -40,7 +38,6 @@
 
 .#{$prefix}input
   flex: 0 0 50px
-  -webkit-flex: 0 0 50px
 
   background-color: transparent
   border: none
