@@ -51,6 +51,10 @@ class Layout extends EventEmitter
       @tabbar.setAlertCount index, count if index != @currentIndex
       return
 
+    page.on 'input', (text) =>
+      @emit 'input', text, page
+      return
+
     @pages.push page
     @container.appendChild page.node
 

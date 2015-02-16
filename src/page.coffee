@@ -36,7 +36,6 @@ class Page extends EventEmitter
     switch keyCode
       when 13
         @emit 'input', @input.value
-        @clearInput()
       else
         return true
 

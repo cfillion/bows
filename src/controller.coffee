@@ -8,10 +8,10 @@ class Controller
 
     for roomName in config['default_rooms']
       page = @ui.createPage roomName
-      page.on 'input', (t) => @userInput t, page
 
     @ui.setCurrentPage 0
 
+    @ui.on 'input', (t, p) => @userInput t, p
     @socket.on 'command', (c) => @serverCommands c
 
   userInput: (text, page) ->
@@ -25,9 +25,11 @@ class Controller
     else
       @socket.send 'msg', text
 
+    page.clearInput()
+
     return
 
-  clientComments: (cmdName, args) ->
+  clientCommands: (cmdName, args) ->
     # TODO: do something with cmd instead of sending it raw to the server
     @socket.send cmdName, args
     return
