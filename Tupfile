@@ -1,10 +1,18 @@
 export GEM_HOME
 
+NODE_BIN = `npm bin`
+
+BROWSERIFY = $(NODE_BIN)/browserify
+COFFEE = $(NODE_BIN)/coffee
+UGLIFY = $(NODE_BIN)/uglifyjs
+SASS = sass
+PREFIXER = $(NODE_BIN)/autoprefixer
+
 # source files
-: foreach src/*.coffee |> coffee -bp %f > %o |> build/%B.js
-: build/*.js |> browserify build/main.js -s bows \
-  | uglifyjs -mo %o |> dist/bows.js
+: foreach src/*.coffee |> $(COFFEE) -bp %f > %o |> build/%B.js
+: build/*.js |> $(BROWSERIFY) build/main.js -s bows -p bundle-collapser/plugin \
+  | $(UGLIFY) -mo %o |> dist/bows.js
 
 # stylesheets
-: style/*.sass |> sass -C --sourcemap=none -t compressed style/main.sass \
-  | autoprefixer -o %o |> dist/bows.css
+: style/*.sass |> $(SASS) -C --sourcemap=none -t compressed style/main.sass \
+  | $(PREFIXER) -o %o |> dist/bows.css
