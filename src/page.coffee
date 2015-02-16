@@ -15,7 +15,7 @@ class Page extends EventEmitter
 
     @input = Utils.createNode 'textarea', 'input'
     @input.placeholder = 'Type your message here...'
-    @input.onkeypress = (event) => @handleInput event.keyCode
+    @input.onkeypress = (event) => @onInput event.keyCode
 
     @node.appendChild @input
 
@@ -24,13 +24,15 @@ class Page extends EventEmitter
 
     @alertCount = 0
 
+    window.addEventListener 'resize', => @onResize()
+
   setName: (newName) ->
     @name = newName
     @emit 'nameChanged', newName
 
     return
 
-  handleInput: (keyCode) ->
+  onInput: (keyCode) ->
     switch keyCode
       when 13
         @emit 'input', @input.value
@@ -39,6 +41,18 @@ class Page extends EventEmitter
         return true
 
     return false
+
+  onResize: ->
+    Utils.scrollToBottom @messages
+    return
+
+  focus: ->
+    Utils.scrollToBottom @messages
+    @resetAlerts()
+
+    @input.focus()
+
+    return
 
   clearInput: ->
     @input.value = ''
@@ -75,14 +89,12 @@ class Page extends EventEmitter
 
     container.appendChild textContainer
 
+    wasAtBottom = Utils.isNearBottom @messages
     @messages.appendChild container
-    @scrollToBottom @messages
+    Utils.scrollToBottom @messages if wasAtBottom
+
     @alert()
 
-    return
-
-  scrollToBottom: (node) ->
-    node.scrollTop = node.scrollHeight
     return
 
   alert: ->

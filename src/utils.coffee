@@ -1,3 +1,5 @@
+SCROLL_THRESHOLD = 20 # affects isNearBottom
+
 Utils =
   currentTimeString: ->
     date = new Date
@@ -15,9 +17,6 @@ Utils =
       input = pad + '' + input
 
     input
-
-  nodeSeparator: ->
-    document.createTextNode "\x20"
 
   isString: (variable) ->
     typeof variable == 'string'
@@ -67,6 +66,16 @@ Utils =
       node.removeChild last_child
 
     return
+
+  isNearBottom: (node) ->
+    node.scrollTop + node.clientHeight >= node.scrollHeight - SCROLL_THRESHOLD
+
+  scrollToBottom: (node) ->
+    node.scrollTop = node.scrollHeight
+    return
+
+  nodeSeparator: ->
+    document.createTextNode "\x20"
 
   closeButton: ->
     button = @createNode 'span', 'close'

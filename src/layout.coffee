@@ -61,11 +61,13 @@ class Layout extends EventEmitter
     return
 
   currentTabChanged: (newIndex) ->
+    return unless page = @pages[newIndex]
+
     if oldPage = @pages[@currentIndex]
       Utils.removeClass 'current', oldPage.node
 
-    Utils.addClass 'current', @pages[newIndex].node
-    @pages[newIndex].resetAlerts()
+    Utils.addClass 'current', page.node
+    page.focus()
 
     @currentIndex = newIndex
     return
