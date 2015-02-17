@@ -7,12 +7,25 @@ class Socket extends EventEmitter
   constructor: (serverUrl) ->
     @serverUrl = serverUrl
 
-    @socket = new WebSocket serverUrl
+    @attemps = 0
+    @queue = []
+
+    @open()
+
+  open: ->
+    @socket = new WebSocket @serverUrl
     @socket.onopen = => @onopen()
     @socket.onmessage = (event) => @onmessage event.data
     @socket.onclose = => @onclose()
 
   onopen: ->
+    @attemps = 0
+    @emit 'connected'
+
+    while @queue.length > 0
+      message = @queue.shift()
+      @socket.send message
+
     @send 'msg', '#hello_world', 'hello'
     return
 
@@ -25,6 +38,14 @@ class Socket extends EventEmitter
     return
 
   onclose: ->
+    @emit 'disconnected'
+
+    maxDelay = Math.pow 2, @attemps
+    seconds = Math.min 30, maxDelay
+
+    retryDelay = Math.random() * (seconds * 1000)
+    setTimeout (=> @attemps++; @open()), retryDelay
+
     return
 
   send: (commands, args...) ->
@@ -35,11 +56,13 @@ class Socket extends EventEmitter
       commands = [commands]
 
     text = Command.serialize commands
+    return false unless text
 
-    if text
+    if @socket.readyState == WebSocket.OPEN
       @socket.send text
-      true
     else
-      false
+      @queue.push text
+
+    true
 
 module.exports = Socket
