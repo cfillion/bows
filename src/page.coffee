@@ -58,30 +58,27 @@ class Page extends EventEmitter
     return
 
   addMessage: (nick, text) ->
-    colorId = hash(nick) % MSG_COLOR_COUNT
+    @addLine "#{nick}: #{text}", nick
+
+  addAction: (nick, text) ->
+    @addLine "* #{nick} #{text}", nick
+
+  addLine: (text, group = null) ->
+    colorCode = 0
+    colorCode = (hash(group) % MSG_COLOR_COUNT) + 1 if group
 
     timeNode = document.createTextNode Utils.currentTimeString()
-    nickNode = document.createTextNode nick
-    nickSuffix = document.createTextNode ':'
     textNode = document.createTextNode text
 
     timeContainer = Utils.createNode 'span', 'time'
     timeContainer.appendChild timeNode
 
-    nickContainer = Utils.createNode 'span', 'nick'
-    nickContainer.appendChild nickNode
-
     textContainer = Utils.createNode 'span', 'text'
     textContainer.appendChild textNode
 
-    container = Utils.createNode 'p', ['message', "color#{colorId + 1}"]
+    container = Utils.createNode 'p', ['message', "color#{colorCode}"]
     container.appendChild timeContainer
-
     container.appendChild Utils.nodeSeparator()
-    container.appendChild nickContainer
-    container.appendChild nickSuffix
-    container.appendChild Utils.nodeSeparator()
-
     container.appendChild textContainer
 
     wasAtBottom = Utils.isNearBottom @messages
