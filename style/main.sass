@@ -32,10 +32,14 @@ $prefix: bows-
     background-color: $main-background
 
   &> div
-    margin: 3px 6px 3px 6px
+    &:not(:last-child)
+      margin: 3px 6px 3px 6px
 
     &:first-child
       margin-top: 6px
+
+    &:last-child
+      margin-bottom: 6px
 
 .#{$prefix}close
   @include button-danger
@@ -47,3 +51,4 @@ $prefix: bows-
 
 @import tabbar
 @import page
+@import statusbar

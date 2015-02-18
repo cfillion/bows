@@ -19,8 +19,8 @@ class Socket extends EventEmitter
     @socket.onclose = => @onclose()
 
   onopen: ->
-    @attemps = 0
     @emit 'connected'
+    @attemps = 0
 
     while @queue.length > 0
       message = @queue.shift()

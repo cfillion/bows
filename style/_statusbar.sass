@@ -1,0 +1,17 @@
+.#{$prefix}statusbar
+  border-top: 1px solid $border
+  font-size: 0.8em
+  padding: 6px
+  padding-bottom: 0
+
+  flex: 0 0 auto
+
+  &:empty
+    display: none
+
+  .#{$prefix}error
+    color: $danger-foreground
+    font-weight: bold
+
+  .#{$prefix}indicator
+    color: $dark-foreground

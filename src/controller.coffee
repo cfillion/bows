@@ -17,6 +17,10 @@ class Controller
     @ui.on 'input', (t, p) => @parseUserInput t, p
     @socket.on 'command', (c) => @execServerCommand c
 
+    @socket.on 'connected', => @connected()
+    @socket.on 'disconnected', => @disconnected()
+    @disconnected()
+
   parseUserInput: (text, page) ->
     return false if text.length < 1
 
@@ -48,5 +52,14 @@ class Controller
     unless callback? command.arguments, this
       alert 'unsupported command received!'
       return false
+
+  connected: ->
+    @ui.statusbar.setStatus ->
+      @addIndicator 'Online'
+
+  disconnected: ->
+    @ui.statusbar.setStatus ->
+      @addError 'Offline'
+      @addOngoing "Reconnecting in the background"
 
 module.exports = Controller

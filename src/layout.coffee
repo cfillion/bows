@@ -1,6 +1,7 @@
 EventEmitter = require './event_emitter'
 
 Page = require './page'
+StatusBar = require './statusbar'
 TabBar = require './tabbar'
 Utils = require './utils'
 
@@ -25,6 +26,9 @@ class Layout extends EventEmitter
 
     @container = Utils.createNode 'div', 'container'
     @root.appendChild @container
+
+    @statusbar = new StatusBar
+    @root.appendChild @statusbar.node
 
   findPage: (identifier) ->
     for page in @pages
