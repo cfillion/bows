@@ -20,6 +20,8 @@ class Page extends EventEmitter
     @input.placeholder = 'Type your message here...'
     @input.onkeypress = (event) => @onInput event.keyCode
 
+    @separator = Utils.createNode 'hr'
+
     @node.appendChild @input
 
     @identifier = identifier
@@ -53,17 +55,23 @@ class Page extends EventEmitter
     Utils.addClass 'current', @node
     Utils.scrollToBottom @messages
 
+    @hasFocus = true
     @resetAlerts()
     @input.focus()
-    @hasFocus = true
+
+    if @messages.lastChild == @separator
+      @messages.removeChild @separator
 
     return
 
   blur: ->
     Utils.removeClass 'current', @node
 
+    # move the separator to the bottom
+    @messages.removeChild @separator if @messages.contains @separator
+    @messages.appendChild @separator
+
     @hasFocus = false
-    @addSeparator()
 
     return
 
@@ -109,12 +117,6 @@ class Page extends EventEmitter
     Utils.scrollToBottom @messages if wasAtBottom
 
     @alert() unless @hasFocus
-
-    return
-
-  addSeparator: ->
-    separator = Utils.createNode 'hr'
-    @messages.appendChild separator
 
     return
 
