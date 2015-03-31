@@ -32,24 +32,13 @@ Utils =
 
   addClass: (klass, node) ->
     klass = @prefix klass
-
-    if node.className
-      node.className += "\x20#{klass}"
-    else
-      node.className = klass
+    node.classList.add klass
 
     return
 
   removeClass: (klass, node) ->
     klass = @prefix klass
-
-    klasses = node.className.split "\x20"
-    index = klasses.indexOf(klass)
-
-    if index > -1
-      klasses.splice index, 1
-
-    node.className = klasses.join "\x20"
+    node.classList.remove klass
 
     return
 
