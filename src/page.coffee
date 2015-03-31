@@ -6,6 +6,9 @@ hash = require 'string-hash'
 
 MSG_COLOR_COUNT = 36
 
+LINE_DEFAULT = 0
+LINE_ERROR = 1
+
 class Page extends EventEmitter
   constructor: (identifier) ->
     @node = Utils.createNode 'div', 'page'
@@ -74,9 +77,18 @@ class Page extends EventEmitter
   addAction: (nick, text) ->
     @addLine "* #{nick} #{text}", nick
 
-  addLine: (text, group = null) ->
-    colorCode = 0
-    colorCode = (hash(group) % MSG_COLOR_COUNT) + 1 if group
+  addError: (source, cause) ->
+    @addLine "#{source} → #{cause}", LINE_ERROR
+
+  addLine: (text, group = 0) ->
+    switch group
+      when LINE_DEFAULT
+        klass = 'color0'
+      when LINE_ERROR
+        klass = 'error'
+      else
+        colorId = hash(group) % MSG_COLOR_COUNT
+        klass = "color#{colorId + 1}"
 
     timeNode = document.createTextNode Utils.currentTimeString()
     textNode = document.createTextNode text
@@ -87,7 +99,7 @@ class Page extends EventEmitter
     textContainer = Utils.createNode 'span', 'text'
     textContainer.appendChild textNode
 
-    container = Utils.createNode 'p', ['message', "color#{colorCode}"]
+    container = Utils.createNode 'p', ['message', klass]
     container.appendChild timeContainer
     container.appendChild Utils.nodeSeparator()
     container.appendChild textContainer

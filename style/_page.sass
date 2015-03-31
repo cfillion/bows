@@ -34,6 +34,9 @@
 .#{$prefix}time, .#{$prefix}color0
   color: $dark-foreground
 
+.#{$prefix}error
+  color: $danger-foreground
+
 @for $i from 0 through $msg-color-count - 1
   .#{$prefix}color#{$i + 1}
     $color: adjust-hue($light-foreground, $i * $msg-color-jump)
