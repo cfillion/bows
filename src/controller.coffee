@@ -25,7 +25,7 @@ class Controller
     return false if text.length < 1
 
     if text[0] == '/'
-      text = text.substring 1
+      text = text.toLowerCase().substring 1
       parts = text.split "\x20"
 
       command =
