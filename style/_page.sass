@@ -20,6 +20,13 @@
   overflow-y: scroll
 
   text-shadow: 1px 1px darken($main-background, 5%)
+  padding-right: 6px
+
+  hr
+    border-color: $dark-foreground
+
+  hr:not(:last-of-type), hr:first-child, hr:last-child
+    display: none
 
 .#{$prefix}message
   margin: 0

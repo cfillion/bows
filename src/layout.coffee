@@ -52,10 +52,7 @@ class Layout extends EventEmitter
       return
 
     page.on 'alertCountChanged', (count) =>
-      if index != @currentIndex
-        @tabbar.setAlertCount index, count
-      else
-        page.resetAlerts()
+      @tabbar.setAlertCount index, count
 
       return
 
@@ -73,15 +70,13 @@ class Layout extends EventEmitter
     return
 
   currentTabChanged: (newIndex) ->
-    return unless page = @pages[newIndex]
+    return if @currentIndex == newIndex
 
-    if oldPage = @pages[@currentIndex]
-      Utils.removeClass 'current', oldPage.node
-
-    Utils.addClass 'current', page.node
-    page.focus()
+    @pages[@currentIndex]?.blur() # previous page
+    @pages[newIndex].focus()
 
     @currentIndex = newIndex
+
     return
 
   closePage: (index) ->

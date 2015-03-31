@@ -23,6 +23,7 @@ class Page extends EventEmitter
     @setName identifier
 
     @alertCount = 0
+    @hasFocus = false
 
     window.addEventListener 'resize', => @onResize()
 
@@ -46,10 +47,20 @@ class Page extends EventEmitter
     return
 
   focus: ->
+    Utils.addClass 'current', @node
     Utils.scrollToBottom @messages
-    @resetAlerts()
 
+    @resetAlerts()
     @input.focus()
+    @hasFocus = true
+
+    return
+
+  blur: ->
+    Utils.removeClass 'current', @node
+
+    @hasFocus = false
+    @addSeparator()
 
     return
 
@@ -85,7 +96,13 @@ class Page extends EventEmitter
     @messages.appendChild container
     Utils.scrollToBottom @messages if wasAtBottom
 
-    @alert()
+    @alert() unless @hasFocus
+
+    return
+
+  addSeparator: ->
+    separator = Utils.createNode 'hr'
+    @messages.appendChild separator
 
     return
 
