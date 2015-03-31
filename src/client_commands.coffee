@@ -14,6 +14,10 @@ ClientCommands =
 
     ctrl.socket.send 'action', page.identifier, text
 
+  join: (args, page, ctrl) ->
+    room = args.join "\x20"
+    ctrl.socket.send 'join', room
+
   close: (cmd, page, ctrl) ->
     ctrl.ui.closePage page
     true
