@@ -52,7 +52,11 @@ class Layout extends EventEmitter
       return
 
     page.on 'alertCountChanged', (count) =>
-      @tabbar.setAlertCount index, count if index != @currentIndex
+      if index != @currentIndex
+        @tabbar.setAlertCount index, count
+      else
+        page.resetAlerts()
+
       return
 
     page.on 'input', (text) =>
