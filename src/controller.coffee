@@ -6,7 +6,7 @@ ServerCommands = require './server_commands'
 
 class Controller
   constructor: (config) ->
-    @socket = new Socket config['server_url']
+    @socket = new Socket config['server_url'], config['default_rooms']
     @ui = new Layout
 
     for roomName in config['default_rooms']
