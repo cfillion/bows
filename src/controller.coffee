@@ -25,8 +25,8 @@ class Controller
     return false if text.length < 1
 
     if text[0] == '/'
-      text = text.toLowerCase().substring 1
-      parts = text.split "\x20"
+      commandString = text.toLowerCase().substring 1
+      parts = commandString.split "\x20"
 
       command =
         name: parts.shift()
@@ -40,7 +40,7 @@ class Controller
     callback = ClientCommands[command.name]
 
     unless callback? command.arguments, page, this
-      alert 'invalid command'
+      page.addError text, 'invalid command'
       return false
 
     page.clearInput()
@@ -51,7 +51,7 @@ class Controller
     callback = ServerCommands[command.name]
 
     unless callback? command, this
-      alert 'unsupported command received!'
+      @ui.createPage(command.room).addError '42', 'broken client'
       return false
 
   connected: ->

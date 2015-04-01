@@ -33,8 +33,27 @@
 .#{$prefix}time, .#{$prefix}color0
   color: $dark-foreground
 
-.#{$prefix}error
-  color: $danger-foreground
+.#{$prefix}alerts
+  flex-shrink: 0
+
+  .#{$prefix}alert
+    border-radius: 3px
+    box-shadow: 0 0 5px $shadow
+    margin-bottom: 5px
+    background-color: $dark-background
+    padding: 5px
+
+    &.#{$prefix}error
+      background-color: $danger-background
+
+      .#{$prefix}close
+        border: 1px solid $main-foreground
+
+  .#{$prefix}title
+    font-weight: bold
+
+  .#{$prefix}close
+    float: right
 
 @for $i from 0 through $msg-color-count - 1
   .#{$prefix}color#{$i + 1}

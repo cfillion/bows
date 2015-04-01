@@ -35,8 +35,8 @@
 
 @mixin button-danger($options: '')
   $base: $danger-background
-  $top: lighten($base, 10%)
-  $bottom: darken($base, 10%)
+  $top: lighten($base, 20%)
+  $bottom: $base
 
   @include button($base, $top, $bottom, $options)
 

@@ -7,7 +7,7 @@ hash = require 'string-hash'
 MSG_COLOR_COUNT = 36
 
 LINE_DEFAULT = 0
-LINE_ERROR = 1
+PROMPT_ERROR = 0
 
 class Page extends EventEmitter
   constructor: (identifier) ->
@@ -15,6 +15,9 @@ class Page extends EventEmitter
 
     @messages = Utils.createNode 'div', 'messages'
     @node.appendChild @messages
+
+    @alerts = Utils.createNode 'div', 'alerts'
+    @node.appendChild @alerts
 
     @input = Utils.createNode 'textarea', 'input'
     @input.placeholder = 'Type your message here...'
@@ -77,6 +80,7 @@ class Page extends EventEmitter
 
   clear: ->
     Utils.clearNode @messages
+    Utils.clearNode @prompts
     @addLine 'page cleared'
     return
 
@@ -90,15 +94,10 @@ class Page extends EventEmitter
   addAction: (nick, text) ->
     @addLine "* #{nick} #{text}", nick
 
-  addError: (source, cause) ->
-    @addLine "#{source} → #{cause}", LINE_ERROR
-
   addLine: (text, group = 0) ->
     switch group
       when LINE_DEFAULT
         klass = 'color0'
-      when LINE_ERROR
-        klass = 'error'
       else
         colorId = hash(group) % MSG_COLOR_COUNT
         klass = "color#{colorId + 1}"
@@ -117,22 +116,58 @@ class Page extends EventEmitter
     container.appendChild Utils.nodeSeparator()
     container.appendChild textContainer
 
-    wasAtBottom = Utils.isNearBottom @messages
-    @messages.appendChild container
-    Utils.scrollToBottom @messages if wasAtBottom
+    @restoreScrolling =>
+      @messages.appendChild container
 
-    @alert() unless @hasFocus
+    @alert()
+
+    return
+
+  addError: (source, cause, context = 'local') ->
+    @addAlert PROMPT_ERROR, "#{source} → #{cause} (#{context})"
+
+  addAlert: (type, message) ->
+    titleString = null
+    klass = null
+
+    switch type
+      when PROMPT_ERROR
+        titleString = 'Error:'
+        klass = 'error'
+
+    alert = Utils.createNode 'div', 'alert'
+    Utils.addClass klass, alert if klass
+
+    if titleString
+      title = Utils.createNode 'span', 'title'
+      title.appendChild document.createTextNode(titleString)
+      alert.appendChild title
+      alert.appendChild Utils.nodeSeparator()
+
+    alert.appendChild document.createTextNode(message)
+
+    rejectButton = Utils.closeButton()
+    rejectButton.onclick = => @alerts.removeChild alert
+    alert.appendChild rejectButton
+
+    @restoreScrolling =>
+      @alerts.appendChild alert
+
+    @alert()
 
     return
 
   alert: ->
-    @emit 'alertCountChanged', ++@alertCount
+    @emit 'alertCountChanged', ++@alertCount unless @hasFocus
     return
 
   resetAlerts: ->
-    @alertCount = -1
-    @alert()
-
+    @emit 'alertCountChanged', @alertCount = 0
     return
+
+  restoreScrolling: (callback) ->
+    wasAtBottom = Utils.isNearBottom @messages
+    callback()
+    Utils.scrollToBottom @messages if wasAtBottom
 
 module.exports = Page
