@@ -1,32 +1,29 @@
 ClientCommands =
-  msg: (args, page, ctrl) ->
+  msg: (args, page, ctrl, send) ->
     [room, text...] = args
     text = text.join "\x20"
 
     return false if room.length < 1 || text.length < 1
 
-    ctrl.socket.send 'msg', page.identifier,
-      [room, text]
+    send 'msg', room, text
 
-  me: (args, page, ctrl) ->
+  me: (args, page, ctrl, send) ->
     text = args.join "\x20"
 
     return false if text.length < 1
 
-    ctrl.socket.send 'action', page.identifier,
-      [page.identifier, text]
+    send 'action', page.identifier, text
 
-  join: (args, page, ctrl) ->
+  join: (args, page, ctrl, send) ->
     room = args.join "\x20"
 
-    ctrl.socket.send 'join', page.identifier,
-      [room]
+    send 'join', room
 
-  clear: (args, page, ctrl) ->
+  clear: (args, page, ctrl, send) ->
     page.clear()
     true
 
-  close: (args, page, ctrl) ->
+  close: (args, page, ctrl, send) ->
     ctrl.ui.closePage page
     true
 

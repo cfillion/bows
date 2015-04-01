@@ -37,9 +37,12 @@ class Controller
         room: page.identifier
         arguments: [page.identifier, text]
 
+    sender = (command, args...) =>
+      @socket.send command, page.identifier, args
+
     callback = ClientCommands[command.name]
 
-    unless callback? command.arguments, page, this
+    unless callback? command.arguments, page, this, sender
       page.addError text, 'invalid command'
       return false
 
