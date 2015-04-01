@@ -75,6 +75,11 @@ class Page extends EventEmitter
 
     return
 
+  clear: ->
+    Utils.clearNode @messages
+    @addLine 'page cleared'
+    return
+
   clearInput: ->
     @input.value = ''
     return

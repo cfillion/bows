@@ -22,7 +22,11 @@ ClientCommands =
     ctrl.socket.send 'join', page.identifier,
       [room]
 
-  close: (cmd, page, ctrl) ->
+  clear: (args, page, ctrl) ->
+    page.clear()
+    true
+
+  close: (args, page, ctrl) ->
     ctrl.ui.closePage page
     true
 
