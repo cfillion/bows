@@ -3,7 +3,9 @@
   flex-direction: column
   flex-grow: 1
 
-  // fix for a Firefox 34-35 bug
+  overflow: auto
+
+  // workaround for a Firefox 34-35 bug
      http://stackoverflow.com/questions/27424831/firefox-flexbox-overflow
   min-height: 1px
 
@@ -14,7 +16,7 @@
   display: none
 
 .#{$prefix}messages
-  flex-grow: 1
+  flex: 1 0 10em
 
   overflow-x: auto
   overflow-y: scroll
