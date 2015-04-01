@@ -5,18 +5,22 @@ ClientCommands =
 
     return false if room.length < 1 || text.length < 1
 
-    ctrl.socket.send 'msg', room, text
+    ctrl.socket.send 'msg', page.identifier,
+      [room, text]
 
   me: (args, page, ctrl) ->
     text = args.join "\x20"
 
     return false if text.length < 1
 
-    ctrl.socket.send 'action', page.identifier, text
+    ctrl.socket.send 'action', page.identifier,
+      [page.identifier, text]
 
   join: (args, page, ctrl) ->
     room = args.join "\x20"
-    ctrl.socket.send 'join', room
+
+    ctrl.socket.send 'join', page.identifier,
+      [room]
 
   close: (cmd, page, ctrl) ->
     ctrl.ui.closePage page

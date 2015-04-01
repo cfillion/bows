@@ -24,13 +24,15 @@ class Socket extends EventEmitter
     @attemps = 0
 
     for room in @loginRooms
-      @send 'join', room
+      @send 'join', room, [room]
 
     while @queue.length > 0
       message = @queue.shift()
       @socket.send message
 
-    @send 'msg', '#hello_world', 'hello'
+    @send 'msg', '#hello_world',
+      ['#hello_world', 'hello']
+
     return
 
   onmessage: (text) ->
@@ -52,9 +54,9 @@ class Socket extends EventEmitter
 
     return
 
-  send: (commands, args...) ->
+  send: (commands, roomName, args) ->
     if Utils.isString commands
-      commands = new Command commands, args
+      commands = new Command commands, roomName, args
 
     unless Utils.isArray commands
       commands = [commands]

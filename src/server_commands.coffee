@@ -1,21 +1,21 @@
 Errors = require './errors'
 
 ServerCommands =
-  error: (args, ctrl) ->
-    code = parseInt args[0]
+  error: (cmd, ctrl) ->
+    code = parseInt cmd.arguments[0]
     message = Errors[code] || Errors[0]
 
-    alert "error ##{code}: #{message}"
+    ctrl.ui.createPage(cmd.room).addError '/test', "#{message} (#{code})"
     true
 
-  msg: (args, ctrl) ->
-    [room, nick, text] = args
-    ctrl.ui.createPage(room).addMessage nick, text
+  msg: (cmd, ctrl) ->
+    [nick, text] = cmd.arguments
+    ctrl.ui.createPage(cmd.room).addMessage nick, text
     true
 
-  action: (args, ctrl) ->
-    [room, nick, text] = args
-    ctrl.ui.createPage(room).addAction nick, text
+  action: (cmd, ctrl) ->
+    [nick, text] = cmd.arguments
+    ctrl.ui.createPage(cmd.room).addAction nick, text
     true
 
 module.exports = ServerCommands

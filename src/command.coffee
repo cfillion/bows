@@ -21,25 +21,27 @@ class Command
     for commandText in splitted
       parts = commandText.split PART_SEPARATOR
 
-      commands.push new Command(parts.shift(), parts)
+      commands.push new Command(parts.shift(), parts.shift(), parts)
 
     commands
 
-  constructor: (cmdName, args = []) ->
+  constructor: (cmdName, roomName, args = []) ->
     unless Utils.isArray args
       args = [args]
 
     @name = cmdName
+    @room = roomName
     @arguments = args
 
   serialize: ->
     parts = @arguments
+    parts.unshift @room
     parts.unshift @name
 
     parts.join PART_SEPARATOR
 
   toString: ->
-    parts = ["CMD #{@name}"]
+    parts = ["CMD #{@name}", "IN #{@room}"]
 
     for argument in @arguments
       parts.push "ARG #{argument}"

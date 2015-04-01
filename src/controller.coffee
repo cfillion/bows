@@ -34,6 +34,7 @@ class Controller
     else
       command =
         name: 'msg'
+        room: page.identifier
         arguments: [page.identifier, text]
 
     callback = ClientCommands[command.name]
@@ -49,7 +50,7 @@ class Controller
   execServerCommand: (command) ->
     callback = ServerCommands[command.name]
 
-    unless callback? command.arguments, this
+    unless callback? command, this
       alert 'unsupported command received!'
       return false
 
