@@ -1,4 +1,5 @@
 Command = require './command'
+Errors = require('./errors').Client
 Layout = require './layout'
 Socket = require './socket'
 Utils = require './utils'
@@ -47,8 +48,10 @@ class Controller
     callback = ClientCommands[command.name]
     value = callback? command.arguments, page, this, sender
 
-    if value == undefined
-      page.addError text, 'command not found'
+    if callback == undefined
+      page.addError text, Errors.COMMAND_NOT_FOUND
+    else if !value
+      page.addError text, Errors.UNKNOWN_ERROR
     else if Utils.isString value
       page.addError text, value
     else
@@ -62,7 +65,7 @@ class Controller
     callback = ServerCommands[command.name]
 
     unless callback? command, this
-      @ui.createPage(command.room).addError '42', 'broken client'
+      @ui.createPage(command.room).addError '42', Errors.BROKEN_CLIENT
       return false
 
   connected: ->
