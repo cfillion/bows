@@ -92,11 +92,7 @@ class Page extends EventEmitter
     return
 
   restoreInput: (text) ->
-    return if @input.value > 0
-
-    @input.value = text
-    @input.select()
-
+    @input.value = text if @input.value > 0
     return
 
   addMessage: (nick, text) ->
@@ -158,7 +154,10 @@ class Page extends EventEmitter
     alert.appendChild document.createTextNode(message)
 
     rejectButton = Utils.closeButton()
-    rejectButton.onclick = => @alerts.removeChild alert
+    rejectButton.onclick = =>
+      @alerts.removeChild alert
+      @input.focus()
+
     alert.appendChild rejectButton
 
     @restoreScrolling =>
