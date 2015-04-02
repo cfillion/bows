@@ -21,7 +21,13 @@ class Command
     for commandText in splitted
       parts = commandText.split PART_SEPARATOR
 
-      commands.push new Command(parts.shift(), parts.shift(), parts)
+      name = parts.shift()
+      key = parts.shift()
+      room = parts.shift()
+
+      command = new Command(name, room, parts)
+      command.key = key
+      commands.push command
 
     commands
 
@@ -36,12 +42,13 @@ class Command
   serialize: ->
     parts = @arguments
     parts.unshift @room
+    parts.unshift @key
     parts.unshift @name
 
     parts.join PART_SEPARATOR
 
   toString: ->
-    parts = ["CMD #{@name}", "IN #{@room}"]
+    parts = ["CMD #{@name}", "KEY #{@key}", "IN #{@room}"]
 
     for argument in @arguments
       parts.push "ARG #{argument}"

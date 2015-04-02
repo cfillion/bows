@@ -1,3 +1,4 @@
+Command = require './command'
 Layout = require './layout'
 Socket = require './socket'
 
@@ -37,8 +38,10 @@ class Controller
         room: page.identifier
         arguments: [page.identifier, text]
 
-    sender = (command, args...) =>
-      @socket.send command, page.identifier, args
+    sender = (cmdName, args...) =>
+      command = new Command cmdName, page.identifier, args
+      command.key = text
+      @socket.send command
 
     callback = ClientCommands[command.name]
 
