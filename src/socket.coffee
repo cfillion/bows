@@ -7,7 +7,6 @@ Utils = require './utils'
 class Socket extends EventEmitter
   constructor: (serverUrl, defaultRooms) ->
     @serverUrl = serverUrl
-    @loginRooms = defaultRooms
 
     @attemps = 0
     @queue = []
@@ -23,9 +22,6 @@ class Socket extends EventEmitter
   onopen: ->
     @emit 'connected'
     @attemps = 0
-
-    for room in @loginRooms
-      @send 'join', room, [room]
 
     while @queue.length > 0
       message = @queue.shift()

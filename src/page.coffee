@@ -29,6 +29,7 @@ class Page extends EventEmitter
 
     @identifier = identifier
     @setName identifier
+    @isRoom = identifier[0] == '#'
 
     @alertCount = 0
     @hasFocus = false

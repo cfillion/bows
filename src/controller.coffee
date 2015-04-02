@@ -9,7 +9,7 @@ ServerCommands = require './server_commands'
 
 class Controller
   constructor: (config) ->
-    @socket = new Socket config['server_url'], config['default_rooms']
+    @socket = new Socket config['server_url']
     @ui = new Layout
 
     for roomName in config['default_rooms']
@@ -69,6 +69,10 @@ class Controller
       return false
 
   connected: ->
+    # (re)join opened rooms
+    for page in @ui.pages when page.isRoom
+      @socket.send 'join', page.identifier, [page.identifier]
+
     @ui.statusbar.setStatus ->
       @addIndicator 'Online'
 
