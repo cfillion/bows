@@ -92,7 +92,7 @@ class Page extends EventEmitter
     return
 
   restoreInput: (text) ->
-    @input.value = text if @input.value > 0
+    @input.value = text if @input.value.length == 0
     return
 
   addMessage: (nick, text) ->
