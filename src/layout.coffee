@@ -87,7 +87,7 @@ class Layout extends EventEmitter
     @container.removeChild page.node
 
     # don't resize the array
-    @pages[index] = false
+    @pages[index] = null
 
     @emit 'pageClosed', page
 
