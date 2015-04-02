@@ -36,13 +36,14 @@ class Command
       args = [args]
 
     @name = cmdName
+    @key = ''
     @room = roomName
     @arguments = args
 
   serialize: ->
     parts = @arguments
     parts.unshift @room
-    parts.unshift @key
+    parts.unshift Utils.truncate @key, 64
     parts.unshift @name
 
     parts.join PART_SEPARATOR

@@ -27,6 +27,13 @@ Utils =
   contains: (string, search) ->
     string.indexOf(search) != -1
 
+  truncate: (string, maxLength) ->
+    if string.length > maxLength
+      string = string.substring 0, maxLength - 1
+      string += '…'
+
+    return string
+
   prefix: (identifier) ->
     "bows-#{identifier}"
 
