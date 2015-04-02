@@ -44,7 +44,10 @@ class Page extends EventEmitter
   onInput: (keyCode) ->
     switch keyCode
       when 13
-        @emit 'input', @input.value
+        text = @input.value
+        @clearInput()
+
+        @emit 'input', text
       else
         return true
 
@@ -86,6 +89,14 @@ class Page extends EventEmitter
 
   clearInput: ->
     @input.value = ''
+    return
+
+  restoreInput: (text) ->
+    return if @input.value > 0
+
+    @input.value = text
+    @input.select()
+
     return
 
   addMessage: (nick, text) ->

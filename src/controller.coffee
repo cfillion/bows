@@ -47,9 +47,8 @@ class Controller
 
     unless callback? command.arguments, page, this, sender
       page.addError text, 'invalid command'
+      page.restoreInput text
       return false
-
-    page.clearInput()
 
     return
 

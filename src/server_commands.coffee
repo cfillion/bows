@@ -5,7 +5,10 @@ ServerCommands =
     code = parseInt cmd.arguments[0]
     message = Errors[code] || Errors[0]
 
-    ctrl.ui.createPage(cmd.room).addError cmd.key, message, code
+    page = ctrl.ui.createPage cmd.room
+    page.addError cmd.key, message, code
+    page.restoreInput cmd.key
+
     true
 
   msg: (cmd, ctrl) ->
