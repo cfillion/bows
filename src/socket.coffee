@@ -1,6 +1,7 @@
 EventEmitter = require './event_emitter'
 
 Command = require './command'
+Errors = require('./errors').Client
 Utils = require './utils'
 
 class Socket extends EventEmitter
@@ -62,7 +63,7 @@ class Socket extends EventEmitter
       commands = [commands]
 
     text = Command.serialize commands
-    return false unless text
+    return Errors.SERIALIZATION_FAILED unless text
 
     if @socket.readyState == WebSocket.OPEN
       @socket.send text
