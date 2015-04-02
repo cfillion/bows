@@ -12,7 +12,7 @@ validateArguments = (args, min, max = null) ->
 
 ClientCommands =
   msg: (args, page, ctrl, send) ->
-    return error if error = validateArguments args, 2
+    return error if error = validateArguments args, 2, -1
 
     [room, text...] = args
     text = text.join "\x20"
@@ -20,7 +20,7 @@ ClientCommands =
     send 'msg', room, text
 
   me: (args, page, ctrl, send) ->
-    return error if error = validateArguments args, 1
+    return error if error = validateArguments args, 1, -1
 
     text = args.join "\x20"
     send 'action', page.identifier, text

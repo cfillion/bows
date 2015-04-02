@@ -65,7 +65,7 @@ class Controller
     callback = ServerCommands[command.name]
 
     unless callback? command, this
-      @ui.createPage(command.room).addError '42', Errors.BROKEN_CLIENT
+      @ui.createPage(command.room).addError command.key, Errors.BROKEN_CLIENT
       return false
 
   connected: ->
