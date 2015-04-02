@@ -1,6 +1,7 @@
 Command = require './command'
 Layout = require './layout'
 Socket = require './socket'
+Utils = require './utils'
 
 ClientCommands = require './client_commands'
 ServerCommands = require './server_commands'
@@ -27,7 +28,7 @@ class Controller
 
     if text[0] == '/'
       commandString = text.toLowerCase().substring 1
-      parts = commandString.split "\x20"
+      parts = commandString.match(/[^\x20]+/g) || []
 
       command =
         name: parts.shift()
@@ -44,11 +45,16 @@ class Controller
       @socket.send command
 
     callback = ClientCommands[command.name]
+    value = callback? command.arguments, page, this, sender
 
-    unless callback? command.arguments, page, this, sender
-      page.addError text, 'invalid command'
-      page.restoreInput text
-      return false
+    if value == undefined
+      page.addError text, 'command not found'
+    else if Utils.isString value
+      page.addError text, value
+    else
+      return
+
+    page.restoreInput text
 
     return
 
