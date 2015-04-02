@@ -21,4 +21,14 @@ ServerCommands =
     ctrl.ui.createPage(cmd.room).addAction nick, text
     true
 
+  join: (cmd, ctrl) ->
+    [nick] = cmd.arguments
+    ctrl.ui.createPage(cmd.room).addLine "#{nick} joined #{cmd.room}"
+    true
+
+  part: (cmd, ctrl) ->
+    [nick] = cmd.arguments
+    ctrl.ui.createPage(cmd.room).addLine "#{nick} left #{cmd.room}"
+    true
+
 module.exports = ServerCommands

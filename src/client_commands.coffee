@@ -27,9 +27,11 @@ ClientCommands =
 
   join: (args, page, ctrl, send) ->
     return error if error = validateArguments args, 1
+    send 'join', args[0]
 
-    room = args.join "\x20"
-    send 'join', room
+  part: (args, page, ctrl, send) ->
+    return error if error = validateArguments args, 1
+    send 'part', args[0]
 
   clear: (args, page, ctrl, send) ->
     return error if error = validateArguments args, 0
