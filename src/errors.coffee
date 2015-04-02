@@ -5,6 +5,7 @@ ClientErrors =
   MISSING_ARGUMENTS: 'some arguments are missing'
   EXTRA_ARGUMENTS: 'too many arguments'
   SERIALIZATION_FAILED: 'contains illegal characters'
+  PAGE_NOT_FOUND: 'page not found'
 
 ServerErrors = [
   ClientErrors.UNKNOWN_ERROR,

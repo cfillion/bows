@@ -6,7 +6,7 @@ validateArguments = (args, min, max = null) ->
   return Errors.MISSING_ARGUMENTS if args.length < min
 
   # the upper limit check is bypassed if 'max' is a negative number
-  return Errors.EXTRA_ARGUMENTS if args.length > max && max > 0
+  return Errors.EXTRA_ARGUMENTS if args.length > max && max > -1
 
   false
 
@@ -38,9 +38,22 @@ ClientCommands =
     true
 
   close: (args, page, ctrl, send) ->
-    return error if error = validateArguments args, 0
+    return error if error = validateArguments args, -1
 
-    ctrl.ui.closePage page
+    if args.length == 0
+      ctrl.ui.closePage page
+      return true
+
+    pages = []
+
+    for arg in args
+      if page = ctrl.ui.findPage(arg)
+        pages.push page
+      else
+        return Errors.PAGE_NOT_FOUND
+
+    ctrl.ui.closePage p for p in pages
+
     true
 
 module.exports = ClientCommands
