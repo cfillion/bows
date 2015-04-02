@@ -11,12 +11,13 @@ validateArguments = (args, min, max = null) ->
   false
 
 ClientCommands =
-  msg: (args, page, ctrl, send) ->
+  msg: (args, page, ctrl, send, expect) ->
     return error if error = validateArguments args, 2, -1
 
     [room, text...] = args
     text = text.join "\x20"
 
+    ctrl.ui.delayFocus room
     send 'msg', room, text
 
   me: (args, page, ctrl, send) ->
@@ -25,21 +26,23 @@ ClientCommands =
     text = args.join "\x20"
     send 'action', page.identifier, text
 
-  join: (args, page, ctrl, send) ->
+  join: (args, page, ctrl, send, expect) ->
     return error if error = validateArguments args, 1
+
+    ctrl.ui.delayFocus args[0]
     send 'join', args[0]
 
   part: (args, page, ctrl, send) ->
     return error if error = validateArguments args, 1
     send 'part', args[0]
 
-  clear: (args, page, ctrl, send) ->
+  clear: (args, page) ->
     return error if error = validateArguments args, 0
 
     page.clear()
     true
 
-  close: (args, page, ctrl, send) ->
+  close: (args, page, ctrl) ->
     return error if error = validateArguments args, -1
 
     if args.length == 0

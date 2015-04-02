@@ -63,9 +63,12 @@ class Layout extends EventEmitter
     @pages.push page
     @container.appendChild page.node
 
+    @setCurrentPage index if @autoFocus == page.identifier
+
     index
 
   setCurrentPage: (index) ->
+    index = @indexOf index if index instanceof Page
     @tabbar.setCurrentTab index
     return
 
@@ -106,5 +109,12 @@ class Layout extends EventEmitter
 
   indexOf: (page) ->
     @pages.indexOf page
+
+  delayFocus: (identifier) ->
+    @autoFocus = identifier
+
+    window.setTimeout =>
+      @autoFocus = null if @autoFocus == identifier
+    , 1000
 
 module.exports = Layout

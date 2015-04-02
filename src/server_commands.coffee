@@ -13,12 +13,15 @@ ServerCommands =
 
   msg: (cmd, ctrl) ->
     [nick, text] = cmd.arguments
-    ctrl.ui.createPage(cmd.room).addMessage nick, text
+    page = ctrl.ui.createPage cmd.room
+    page.addMessage nick, text
+
     true
 
   action: (cmd, ctrl) ->
     [nick, text] = cmd.arguments
-    ctrl.ui.createPage(cmd.room).addAction nick, text
+    page = ctrl.ui.createPage cmd.room
+    page.addAction nick, text
     true
 
   join: (cmd, ctrl) ->
