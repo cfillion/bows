@@ -76,6 +76,10 @@ Utils =
   hide: (node) ->
     node.style.display = 'none'
 
+  truncateNode: (node, threshold = 3000) ->
+    while node.childElementCount > threshold
+      node.removeChild node.firstChild
+
   nodeSeparator: ->
     document.createTextNode "\x20"
 

@@ -135,6 +135,7 @@ class Page extends EventEmitter
 
     @restoreScrolling =>
       @messages.appendChild container
+      Utils.truncateNode @messages
 
     @alert()
 
@@ -172,6 +173,7 @@ class Page extends EventEmitter
 
     @restoreScrolling =>
       @alerts.appendChild alert
+      Utils.truncateNode @alerts, 5
 
     @alert()
 
