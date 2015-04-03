@@ -90,8 +90,12 @@ class Layout extends EventEmitter
     @tabbar.removeTab index
     @container.removeChild page.node
 
-    # don't resize the array
-    @pages[index] = null
+    # the timout prevents the page from being immediately reopened
+    # (otherwise rooms would be un-closable when joined)
+    window.setTimeout =>
+      # clear memory without resizing the array (thus keeping the index reserved)
+      @pages[index] = null
+    , 1000
 
     @emit 'pageClosed', page
 
