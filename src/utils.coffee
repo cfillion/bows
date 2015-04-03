@@ -70,6 +70,12 @@ Utils =
     node.scrollTop = node.scrollHeight
     return
 
+  show: (node) ->
+    node.style.display = ''
+
+  hide: (node) ->
+    node.style.display = 'none'
+
   nodeSeparator: ->
     document.createTextNode "\x20"
 

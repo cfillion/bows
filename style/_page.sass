@@ -80,3 +80,15 @@
   font-size: 1.2em
 
   resize: none
+
+.#{$prefix}expand
+  @include button-active
+
+  color: darken($main-foreground, 10%)
+  font-size: $small-size
+  text-shadow: none
+
+.#{$prefix}verbatim
+  margin: 0
+  white-space: pre-wrap
+  word-break: break-all

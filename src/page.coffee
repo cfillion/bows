@@ -1,5 +1,6 @@
 EventEmitter = require './event_emitter'
 
+StringParser = require './parser'
 Utils = require './utils'
 
 hash = require 'string-hash'
@@ -97,12 +98,15 @@ class Page extends EventEmitter
     return
 
   addMessage: (nick, text) ->
-    @addLine "#{nick}: #{text}", nick
+    prefix = document.createTextNode "#{nick}: "
+    content = StringParser.parse text
+
+    @addLine [prefix].concat(content), nick
 
   addAction: (nick, text) ->
     @addLine "* #{nick} #{text}", nick
 
-  addLine: (text, group = 0) ->
+  addLine: (content, group = 0) ->
     switch group
       when LINE_DEFAULT
         klass = 'color0'
@@ -111,13 +115,18 @@ class Page extends EventEmitter
         klass = "color#{colorId + 1}"
 
     timeNode = document.createTextNode Utils.currentTimeString()
-    textNode = document.createTextNode text
 
     timeContainer = Utils.createNode 'span', 'time'
     timeContainer.appendChild timeNode
 
     textContainer = Utils.createNode 'span', 'text'
-    textContainer.appendChild textNode
+
+    if Utils.isString content
+      textContainer.appendChild document.createTextNode(content)
+    else if Utils.isArray content
+      textContainer.appendChild node for node in content
+    else
+      textContainer.appendChild content
 
     container = Utils.createNode 'p', ['message', klass]
     container.appendChild timeContainer
