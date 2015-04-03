@@ -36,16 +36,17 @@ class Layout extends EventEmitter
 
     undefined
 
-  createPage: (identifier) ->
+  createPage: (identifier, markAsRead = false) ->
     return page if page = @findPage(identifier)
 
     page = new Page identifier
-    @addPage page
+    @addPage page, markAsRead
 
     page
 
-  addPage: (page) ->
+  addPage: (page, markAsRead = false) ->
     index = @tabbar.addTab page.name
+    @tabbar.markAsRead index if markAsRead
 
     page.on 'nameChanged', (newName) =>
       @tabbar.renameTab index, newName

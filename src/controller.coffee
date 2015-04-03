@@ -13,7 +13,7 @@ class Controller
     @ui = new Layout
 
     for roomName in config['default_rooms']
-      page = @ui.createPage roomName
+      page = @ui.createPage roomName, true
 
     @ui.setCurrentPage 0
 

@@ -1,19 +1,20 @@
-.#{$prefix}tab-button
-  @include button-active(static)
-
+.#{$prefix}tab
   display: flex
   flex: 1 0 auto
   justify-content: space-between
   align-items: center
 
-  border-radius: 0
-
   &:not(.#{$prefix}current)
-    @include button-dark
-    border-radius: 0
+    @include button-dark(noradius)
 
     .#{$prefix}close
       display: none
+
+  &.#{$prefix}current
+    @include button-active(static noradius)
+
+  &.#{$prefix}new
+    @include button-warning(noradius)
 
   &:first-child
     @include border-left-radius(10px)

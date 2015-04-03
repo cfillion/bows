@@ -18,7 +18,7 @@ class TabBar extends EventEmitter
     label = Utils.createNode 'span', 'label'
     alert = Utils.createNode 'span', 'alert'
 
-    btn = Utils.createNode 'span', 'tab-button'
+    btn = Utils.createNode 'span', ['tab', 'new']
     btn.appendChild label
     btn.appendChild Utils.nodeSeparator()
     btn.appendChild alert
@@ -48,6 +48,7 @@ class TabBar extends EventEmitter
 
     @currentIndex = index
     @emit 'currentChanged', index
+    @markAsRead index
 
     return
 
@@ -80,5 +81,10 @@ class TabBar extends EventEmitter
     # the onclick callbacks would still use the old index
 
     @tabs[index] = false
+
+  markAsRead: (index) ->
+    return unless tab = @tabs[index]
+
+    Utils.removeClass 'new', tab.button
 
 module.exports = TabBar
