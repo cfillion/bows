@@ -63,8 +63,10 @@ class TabBar extends EventEmitter
   setAlertCount: (index, count) ->
     return unless tab = @tabs[index]
 
+    text = count.toLocaleString()
+
     Utils.clearNode tab.alert
-    tab.alert.appendChild document.createTextNode(count) if count > 0
+    tab.alert.appendChild document.createTextNode(text) if count > 0
 
     return
 
