@@ -24,6 +24,9 @@ class Controller
     @socket.on 'disconnected', => @disconnected()
     @disconnected()
 
+    @ui.on 'pageClosed', (p) =>
+      @socket.send 'part', p.identifier, p.identifier if p.isRoom
+
   parseUserInput: (text, page) ->
     return false if text.length < 1
 
