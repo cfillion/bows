@@ -71,10 +71,10 @@ Utils =
     return
 
   show: (node) ->
-    node.style.display = ''
+    @removeClass 'hidden', node
 
   hide: (node) ->
-    node.style.display = 'none'
+    @addClass 'hidden', node
 
   truncateNode: (node, threshold = 3000) ->
     while node.childElementCount > threshold
