@@ -97,6 +97,7 @@ class Layout extends EventEmitter
       @pages[index] = null
     , 1000
 
+    page.isClosed = true
     @emit 'pageClosed', page
 
     newIndex = @findNeighbor index
@@ -108,7 +109,8 @@ class Layout extends EventEmitter
     # search a valid neighbour index first to the left and then to the right
     for testIndex in [(index - 1)...-@pages.length]
       testIndex = Math.abs testIndex
-      return testIndex if @pages[testIndex] && testIndex != index
+      page = @pages[testIndex]
+      return testIndex if page && !page.isClosed
 
     undefined
 
