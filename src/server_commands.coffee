@@ -6,7 +6,8 @@ ServerCommands =
     message = Errors[code] || Errors[0]
 
     page = ctrl.ui.createPage cmd.room
-    page.addError cmd.key, message, code
+    input = page.history.hashTable[cmd.key] || ''
+    page.addError input, message, code
     page.restoreInput cmd.key
 
     true

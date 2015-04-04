@@ -43,7 +43,7 @@ class Command
   serialize: ->
     parts = @arguments
     parts.unshift @room
-    parts.unshift Utils.truncate @key, 64
+    parts.unshift @key
     parts.unshift @name
 
     parts.join PART_SEPARATOR

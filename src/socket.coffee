@@ -64,7 +64,7 @@ class Socket extends EventEmitter
     if @socket.readyState == WebSocket.OPEN
       @socket.send text
     else
-      @queue.shift if @queue.length > 50
+      @queue.shift() if @queue.length > 50
       @queue.push text
 
     true

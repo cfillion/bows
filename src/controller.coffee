@@ -45,7 +45,7 @@ class Controller
 
     sender = (cmdName, args...) =>
       command = new Command cmdName, page.identifier, args
-      command.key = text
+      command.key = page.history.lastHash
       @socket.send command
 
     callback = ClientCommands[command.name]
@@ -60,7 +60,7 @@ class Controller
     else
       return
 
-    page.restoreInput text
+    page.history.move -1
 
     return
 
@@ -68,7 +68,8 @@ class Controller
     callback = ServerCommands[command.name]
 
     unless callback? command, this
-      @ui.createPage(command.room).addError command.key, Errors.BROKEN_CLIENT
+      page = @ui.createPage command.room
+      page.addError command.toString(), Errors.BROKEN_CLIENT
       return false
 
   connected: ->

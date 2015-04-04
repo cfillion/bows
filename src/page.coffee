@@ -1,5 +1,6 @@
 EventEmitter = require './event_emitter'
 
+History = require './history'
 StringParser = require './parser'
 Utils = require './utils'
 
@@ -22,7 +23,7 @@ class Page extends EventEmitter
 
     @input = Utils.createNode 'textarea', 'input'
     @input.placeholder = 'Type your message here...'
-    @input.onkeypress = (event) => @onInput event.keyCode
+    @input.onkeydown = (event) => @onInput event.keyCode
 
     @separator = Utils.createNode 'hr'
 
@@ -35,6 +36,9 @@ class Page extends EventEmitter
     @alertCount = 0
     @hasFocus = false
 
+    @history = new History
+    @history.on 'changed', (newText) => @input.value = newText
+
     window.addEventListener 'resize', => @onResize()
 
   setName: (newName) ->
@@ -45,11 +49,16 @@ class Page extends EventEmitter
 
   onInput: (keyCode) ->
     switch keyCode
-      when 13
+      when 13 # return
         text = @input.value
-        @clearInput()
+        @history.push text
 
+        @clearInput()
         @emit 'input', text
+      when 38 # up arrow
+        @history.move -1, @input.value
+      when 40 # down arrow
+        @history.move 1, @input.value
       else
         return true
 
@@ -93,8 +102,9 @@ class Page extends EventEmitter
     @input.value = ''
     return
 
-  restoreInput: (text) ->
-    @input.value = text if @input.value.length == 0
+  restoreInput: (key) ->
+    return unless @input.value.length == 0
+    @history.restore key, @input.value
     return
 
   addMessage: (nick, text) ->
@@ -142,6 +152,7 @@ class Page extends EventEmitter
     return
 
   addError: (source, cause, context = 'local') ->
+    source = Utils.truncate source, 64
     @addAlert PROMPT_ERROR, "#{source} → #{cause} (#{context})"
 
   addAlert: (type, message) ->
