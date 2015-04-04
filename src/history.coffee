@@ -35,9 +35,6 @@ class History extends EventEmitter
     @stack.shift() if @stack.length > 50
     @stack.push text
 
-    console.log @hashTable
-    console.log @stack
-
     @currentPosition = 0
     @lastHash = hashValue
 
