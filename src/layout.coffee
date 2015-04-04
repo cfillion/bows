@@ -69,7 +69,7 @@ class Layout extends EventEmitter
     index
 
   setCurrentPage: (index) ->
-    index = @indexOf index if index instanceof Page
+    index = @resolveIndex index
     @tabbar.setCurrentTab index
     return
 
@@ -84,7 +84,7 @@ class Layout extends EventEmitter
     return
 
   closePage: (index) ->
-    index = @indexOf index if index instanceof Page
+    index = @resolveIndex index
     return unless page = @pages[index]
 
     @tabbar.removeTab index
@@ -123,5 +123,21 @@ class Layout extends EventEmitter
     window.setTimeout =>
       @autoFocus = null if @autoFocus == identifier
     , 1000
+
+  setClosable: (index, boolean) ->
+    index = @resolveIndex index
+    @tabbar.setClosable index, boolean
+
+    return
+
+  isClosable: (index) ->
+    index = @resolveIndex index
+    @tabbar.isClosable index
+
+  resolveIndex: (index) ->
+    if index instanceof Page
+      @indexOf index
+    else
+      index
 
 module.exports = Layout

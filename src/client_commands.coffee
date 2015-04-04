@@ -46,16 +46,21 @@ ClientCommands =
     return error if error = validateArguments args, -1
 
     if args.length == 0
+      return Errors.PERMANENT_PAGE unless ctrl.ui.isClosable page
       ctrl.ui.closePage page
       return true
 
     pages = []
 
     for arg in args
-      if page = ctrl.ui.findPage(arg)
-        pages.push page
-      else
+      page = ctrl.ui.findPage arg
+
+      if !page
         return Errors.PAGE_NOT_FOUND
+      else if !ctrl.ui.isClosable page
+        return Errors.PERMANENT_PAGE
+      else
+        pages.push page
 
     ctrl.ui.closePage p for p in pages
 

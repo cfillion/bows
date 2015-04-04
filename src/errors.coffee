@@ -6,6 +6,7 @@ ClientErrors =
   EXTRA_ARGUMENTS: 'too many arguments'
   SERIALIZATION_FAILED: 'contains illegal characters'
   PAGE_NOT_FOUND: 'page not found'
+  PERMANENT_PAGE: 'permanent page'
 
 ServerErrors = [
   ClientErrors.UNKNOWN_ERROR,

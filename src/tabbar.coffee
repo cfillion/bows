@@ -30,6 +30,7 @@ class TabBar extends EventEmitter
     @tabs.push
       alert: alert
       button: btn
+      closable: true
       label: label
 
     @renameTab index, name
@@ -71,7 +72,7 @@ class TabBar extends EventEmitter
     return
 
   closeTab: (index) ->
-    @emit 'closeRequested', index
+    @emit 'closeRequested', index if @isClosable index
     return
 
   removeTab: (index) ->
@@ -88,5 +89,19 @@ class TabBar extends EventEmitter
     return unless tab = @tabs[index]
 
     Utils.removeClass 'new', tab.button
+
+  setClosable: (index, boolean) ->
+    return unless tab = @tabs[index]
+
+    tab.closable = boolean
+
+    if boolean
+      Utils.removeClass 'permanent', tab.button
+    else
+      Utils.addClass 'permanent', tab.button
+
+  isClosable: (index) ->
+    return unless tab = @tabs[index]
+    tab.closable
 
 module.exports = TabBar

@@ -14,6 +14,7 @@ class Controller
 
     for roomName in config['default_rooms']
       page = @ui.createPage roomName, true
+      @ui.setClosable page, false
 
     @ui.setCurrentPage 0
 
