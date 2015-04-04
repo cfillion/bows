@@ -60,7 +60,7 @@ class Controller
     else
       return
 
-    page.history.move -1
+    page.restoreInput()
 
     return
 

@@ -42,6 +42,8 @@ class History extends EventEmitter
     @lastHash = hashValue
 
   restore: (key, originalInput) ->
+    key = @lastHash unless key
+
     text = @hashTable[key]
     return if text == undefined
 
@@ -51,8 +53,5 @@ class History extends EventEmitter
       @emit 'changed', text
     else
       @moveTo @stack.length - index, originalInput
-
-  resolveHash: (key) ->
-    @stack[@hashTable[key] - 1]
 
 module.exports = History

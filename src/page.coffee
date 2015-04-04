@@ -102,7 +102,7 @@ class Page extends EventEmitter
     @input.value = ''
     return
 
-  restoreInput: (key) ->
+  restoreInput: (key = null) ->
     return unless @input.value.length == 0
     @history.restore key, @input.value
     return
