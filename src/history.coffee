@@ -10,6 +10,7 @@ class History extends EventEmitter
 
   move: (steps, originalInput) ->
     @moveTo @currentPosition - steps, originalInput
+    return
 
   moveTo: (position, originalInput) ->
     text = @stack[@stack.length - position]
@@ -50,5 +51,7 @@ class History extends EventEmitter
       @emit 'changed', text
     else
       @moveTo @stack.length - index, originalInput
+
+    return
 
 module.exports = History

@@ -124,6 +124,8 @@ class Layout extends EventEmitter
       @autoFocus = null if @autoFocus == identifier
     , 1000
 
+    return
+
   setClosable: (index, boolean) ->
     index = @resolveIndex index
     @tabbar.setClosable index, boolean

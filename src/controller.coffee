@@ -81,9 +81,13 @@ class Controller
     @ui.statusbar.setStatus ->
       @addIndicator 'Online'
 
+    return
+
   disconnected: ->
     @ui.statusbar.setStatus ->
       @addError 'Offline'
       @addOngoing "Reconnecting in the background"
+
+    return
 
 module.exports = Controller

@@ -72,13 +72,17 @@ Utils =
 
   show: (node) ->
     @removeClass 'hidden', node
+    return
 
   hide: (node) ->
     @addClass 'hidden', node
+    return
 
   truncateNode: (node, threshold = 3000) ->
     while node.childElementCount > threshold
       node.removeChild node.firstChild
+
+    return
 
   nodeSeparator: ->
     document.createTextNode "\x20"

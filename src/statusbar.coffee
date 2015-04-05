@@ -59,4 +59,6 @@ class StatusBar
 
       suffixNode.appendChild document.createTextNode(suffix)
 
+    return
+
 module.exports = StatusBar

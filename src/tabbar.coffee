@@ -82,13 +82,13 @@ class TabBar extends EventEmitter
 
     # don't change the other tab's indexes
     # the onclick callbacks would still use the old index
-
     @tabs[index] = false
 
-  markAsRead: (index) ->
-    return unless tab = @tabs[index]
+    return
 
-    Utils.removeClass 'new', tab.button
+  markAsRead: (index) ->
+    Utils.removeClass 'new', tab.button if tab = @tabs[index]
+    return
 
   setClosable: (index, boolean) ->
     return unless tab = @tabs[index]
@@ -99,6 +99,8 @@ class TabBar extends EventEmitter
       Utils.removeClass 'permanent', tab.button
     else
       Utils.addClass 'permanent', tab.button
+
+    return
 
   isClosable: (index) ->
     return unless tab = @tabs[index]

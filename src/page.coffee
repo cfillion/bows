@@ -202,5 +202,6 @@ class Page extends EventEmitter
     wasAtBottom = Utils.isNearBottom @messages
     callback()
     Utils.scrollToBottom @messages if wasAtBottom
+    return
 
 module.exports = Page
