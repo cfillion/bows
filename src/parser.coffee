@@ -63,36 +63,29 @@ StringParser =
     while string.length > 0
       if match = /(\*\*|__)(?=\S)(.*?\S[*_]*)\1/.exec string
         type = STRONG
+        node = Utils.createNode 'strong'
       else if match = /(\*|_)(?=\S)(.*?\S)\1/.exec string
         type = ITALIC
+        node = Utils.createNode 'em'
       else if match = /(~~)(?=\S)(.*?\S)\1/.exec string
         type = STRIKE
+        node = Utils.createNode 's'
       else
         type = TEXT
-        match = [string]
-        match.index = 0
+        node = document.createTextNode string
+        nodes.push node
+        return nodes
 
-      if(match.index > 0)
+      if match.index > 0
         prefix = string.substring 0, match.index
         nodes = nodes.concat @parseMarkdown(prefix)
 
       switch type
         when STRONG, ITALIC, STRIKE
-          tagName = switch type
-            when STRONG
-              'strong'
-            when ITALIC
-              'em'
-            when STRIKE
-              's'
-
-          node = Utils.createNode tagName
           node.appendChild n for n in @parseMarkdown(match[2])
           nodes.push node
-        when TEXT
-          textNode = document.createTextNode string
-          nodes.push textNode
 
+      nodes.push node
       string = string.substr match.index + match[0].length, match[0].length
 
     nodes
