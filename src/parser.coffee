@@ -1,10 +1,5 @@
 Utils = require './utils'
 
-TEXT = 0
-STRONG = 1
-ITALIC = 2
-STRIKE = 3
-
 StringParser =
   parse: (string) ->
     truncateIndex = string.indexOf "\n"
@@ -61,33 +56,56 @@ StringParser =
     nodes = []
 
     while string.length > 0
-      if match = /(\*\*|__)(?=\S)(.*?\S[*_]*)\1/.exec string
-        type = STRONG
+      if match = /\[([^\]]+?)\]\((\S+)(?: (["']?)([^\3]+)\3)?\)/.exec string
+        # inline link tags
+        node = Utils.createNode 'a'
+        node.target = '_blank'
+        node.href = match[2]
+        node.title = match[4] if match[4]
+        @deepParse match[1], node
+
+      else if match = /((?:https?|ftp):\/\/(?:\S)+)/.exec string
+        # automatic link
+        node = Utils.createNode 'a'
+        node.target = '_blank'
+        node.href = match[1]
+        node.appendChild document.createTextNode(node.href)
+
+      else if match = /(\*\*|__)(?=\S)(.*?\S[*_]*)\1/.exec string
+        # bold
         node = Utils.createNode 'strong'
+        @deepParse match[2], node
+
       else if match = /(\*|_)(?=\S)(.*?\S)\1/.exec string
-        type = ITALIC
+        # italic
         node = Utils.createNode 'em'
+        @deepParse match[2], node
+
       else if match = /(~~)(?=\S)(.*?\S)\1/.exec string
-        type = STRIKE
+        # strikethrough
         node = Utils.createNode 's'
+        @deepParse match[2], node
+
       else
-        type = TEXT
+        # text
         node = document.createTextNode string
         nodes.push node
         return nodes
 
+      # parses what comes before the matching string
       if match.index > 0
         prefix = string.substring 0, match.index
         nodes = nodes.concat @parseMarkdown(prefix)
 
-      switch type
-        when STRONG, ITALIC, STRIKE
-          node.appendChild n for n in @parseMarkdown(match[2])
-          nodes.push node
-
       nodes.push node
+
+      # removes the matched part of the string
       string = string.substr match.index + match[0].length, match[0].length
 
     nodes
+
+  deepParse: (string, node) ->
+    node.appendChild n for n in @parseMarkdown string
+    return
 
 module.exports = StringParser
