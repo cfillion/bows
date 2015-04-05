@@ -41,6 +41,14 @@ $prefix: bows-
     &:last-child
       margin-bottom: 6px
 
+  a
+    color: $link-foreground
+    text-decoration: underline
+
+    &:hover
+      color: desaturate($link-foreground, 30%)
+      text-decoration: none
+
 .#{$prefix}close
   @include button-danger
 
