@@ -1,7 +1,7 @@
 EventEmitter = require './event_emitter'
 
 Command = require './command'
-Errors = require('./errors').Client
+Errors = require('./errors').client
 Utils = require './utils'
 
 class Socket extends EventEmitter

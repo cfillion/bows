@@ -1,4 +1,4 @@
-Errors = require('./errors').Client
+Errors = require('./errors').client
 
 validateArguments = (args, min, max = null) ->
   max = min unless max

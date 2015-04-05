@@ -1,4 +1,4 @@
-Errors = require('./errors').Server
+Errors = require('./errors').server
 
 ServerCommands =
   error: (cmd, ctrl) ->

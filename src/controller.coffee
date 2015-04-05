@@ -1,5 +1,5 @@
 Command = require './command'
-Errors = require('./errors').Client
+Errors = require('./errors').client
 Layout = require './layout'
 Socket = require './socket'
 Utils = require './utils'

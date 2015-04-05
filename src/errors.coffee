@@ -19,5 +19,5 @@ ServerErrors = [
 ]
 
 module.exports =
-  Client: ClientErrors
-  Server: ServerErrors
+  client: ClientErrors
+  server: ServerErrors
