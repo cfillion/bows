@@ -27,14 +27,15 @@ ClientCommands =
     send 'action', page.identifier, text
 
   join: (args, page, ctrl, send, expect) ->
-    return error if error = validateArguments args, 1
+    return error if error = validateArguments args, 0, 1
+    room = args[0] || page.identifier
 
-    ctrl.ui.delayFocus args[0]
-    send 'join', args[0]
+    ctrl.ui.delayFocus room
+    send 'join', room
 
   part: (args, page, ctrl, send) ->
-    return error if error = validateArguments args, 1
-    send 'part', args[0]
+    room = (args.shift() if args[0] && args[0][0] == '#') || page.identifier
+    send 'part', room, args.join("\x20")
 
   clear: (args, page) ->
     return error if error = validateArguments args, 0

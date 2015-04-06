@@ -1,4 +1,5 @@
 Errors = require('./errors').server
+Utils = require './utils'
 
 ServerCommands =
   error: (cmd, ctrl) ->
@@ -31,8 +32,18 @@ ServerCommands =
     true
 
   part: (cmd, ctrl) ->
-    [nick] = cmd.arguments
-    ctrl.ui.createPage(cmd.room).addLine "#{nick} left #{cmd.room}"
+    [nick, reasonCode, userString] = cmd.arguments
+
+    reason = switch parseInt(reasonCode)
+      when 0
+        'connection lost'
+      when 1
+        '"' + Utils.truncate(userString, 50) + '"' if userString.length > 0
+      else
+        'unknown'
+
+    suffix = if reason then " (#{reason})" else ''
+    ctrl.ui.createPage(cmd.room).addLine "#{nick} left #{cmd.room}#{suffix}"
     true
 
 module.exports = ServerCommands
