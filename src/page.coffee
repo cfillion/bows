@@ -9,7 +9,8 @@ hash = require 'string-hash'
 MSG_COLOR_COUNT = 36
 
 LINE_DEFAULT = 0
-PROMPT_ERROR = 0
+NOTICE_ERROR = 0
+NOTICE_REMINDER = 1
 
 class Page extends EventEmitter
   constructor: (identifier) ->
@@ -18,8 +19,8 @@ class Page extends EventEmitter
     @messages = Utils.createNode 'div', 'messages'
     @node.appendChild @messages
 
-    @alerts = Utils.createNode 'div', 'alerts'
-    @node.appendChild @alerts
+    @notices = Utils.createNode 'div', 'notices'
+    @node.appendChild @notices
 
     @input = Utils.createNode 'textarea', 'input'
     @input.placeholder = 'Type your message here...'
@@ -175,42 +176,45 @@ class Page extends EventEmitter
 
   addError: (source, cause, context = 'local') ->
     source = Utils.truncate source, 64
-    @addAlert PROMPT_ERROR, "#{source} → #{cause} (#{context})"
+    @addNotice NOTICE_ERROR, "#{source} → #{cause} (#{context})"
+    @alert()
+    return
 
-  addAlert: (type, message) ->
+  addNotice: (type, message, rejectable = true) ->
     titleString = null
     klass = null
 
     switch type
-      when PROMPT_ERROR
+      when NOTICE_ERROR
         titleString = 'Error:'
         klass = 'error'
+      when NOTICE_REMINDER
+        titleString = 'Reminder:'
 
-    alert = Utils.createNode 'div', 'alert'
-    Utils.addClass klass, alert if klass
+    notice = Utils.createNode 'div', 'notice'
+    Utils.addClass klass, notice if klass
 
     if titleString
       title = Utils.createNode 'span', 'title'
       title.appendChild document.createTextNode(titleString)
-      alert.appendChild title
-      alert.appendChild Utils.nodeSeparator()
+      notice.appendChild title
+      notice.appendChild Utils.nodeSeparator()
 
-    alert.appendChild document.createTextNode(message)
+    notice.appendChild document.createTextNode(message)
 
-    rejectButton = Utils.closeButton()
-    rejectButton.onclick = =>
-      @alerts.removeChild alert
-      @input.focus()
+    if rejectable
+      rejectButton = Utils.closeButton()
+      rejectButton.onclick = =>
+        @notices.removeChild notice
+        @input.focus()
 
-    alert.appendChild rejectButton
+      notice.appendChild rejectButton
 
     @restoreScrolling =>
-      @alerts.appendChild alert
-      Utils.truncateNode @alerts, 5
+      @notices.appendChild notice
+      Utils.truncateNode @notices, 5
 
-    @alert()
-
-    return
+    notice
 
   alert: ->
     @emit 'alertCountChanged', ++@alertCount unless @hasFocus
@@ -234,8 +238,16 @@ class Page extends EventEmitter
   setMultiline: (enable) ->
     if enable
       Utils.addClass 'multiline', @node
+      @multilineReminder = @addNotice NOTICE_REMINDER,
+        'Press Shift+Enter to send your message when using the Multiline Editor.',
+        false
     else
       Utils.removeClass 'multiline', @node
+      Utils.scrollToBottom @messages
+
+      if @multilineReminder
+        @notices.removeChild @multilineReminder
+        delete @multilineReminder
 
     @multiline = enable
     return
