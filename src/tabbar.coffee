@@ -82,7 +82,7 @@ class TabBar extends EventEmitter
 
     # don't change the other tab's indexes
     # the onclick callbacks would still use the old index
-    @tabs[index] = false
+    delete @tabs[index]
 
     return
 

@@ -94,7 +94,7 @@ class Layout extends EventEmitter
     # (otherwise rooms would be un-closable when joined)
     window.setTimeout =>
       # clear memory without resizing the array (thus keeping the index reserved)
-      @pages[index] = null
+      delete @pages[index]
     , 1000
 
     page.isClosed = true
