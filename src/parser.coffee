@@ -2,6 +2,7 @@ Utils = require './utils'
 
 StringParser =
   parse: (string) ->
+    string = string.trim()
     truncateIndex = string.indexOf "\n"
 
     if truncateIndex != -1
