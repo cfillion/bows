@@ -53,20 +53,19 @@ class Page extends EventEmitter
     # wait until the character has been inserted into the textarea
     window.setTimeout (=> @detectMultiline()), 0
 
-    # skip if any modifier key is active, but always treat the Tab key
     hasModifier = e.altKey || e.ctrlKey || e.metaKey || e.shiftKey
-    hasModifier = !hasModifier if @multiline
-    return true if hasModifier && e.keyCode != 9
 
     switch e.keyCode
       when 9 # tab
         ; # TODO: insert \t
       when 13 # return
+        passThrough = if @multiline then !hasModifier else hasModifier
+        return true if passThrough
         @sendInput()
-      when 38 # up arrow
-        @history.move -1, @input.value
-      when 40 # down arrow
-        @history.move 1, @input.value
+      when 38, 40 # up and down arrows
+        return true if @multiline && !hasModifier
+        steps = e.keyCode - 39 # 38 -> -1, 40 -> 1
+        @history.move steps, @input.value
       else
         return true
 
