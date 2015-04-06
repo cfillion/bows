@@ -23,7 +23,8 @@ class Page extends EventEmitter
 
     @input = Utils.createNode 'textarea', 'input'
     @input.placeholder = 'Type your message here...'
-    @input.onkeydown = (event) => @onInput event.keyCode
+    @input.onkeydown = (event) => @onInput event
+    @input.onpaste = => @detectMultiline()
 
     @separator = Utils.createNode 'hr'
 
@@ -35,9 +36,10 @@ class Page extends EventEmitter
 
     @alertCount = 0
     @hasFocus = false
+    @multiline = false
 
     @history = new History
-    @history.on 'changed', (newText) => @input.value = newText
+    @history.on 'changed', (newText) => @setInput newText
 
     window.addEventListener 'resize', => @onResize()
 
@@ -47,14 +49,20 @@ class Page extends EventEmitter
 
     return
 
-  onInput: (keyCode) ->
-    switch keyCode
-      when 13 # return
-        text = @input.value
-        @history.push text
+  onInput: (e) ->
+    # wait until the character has been inserted into the textarea
+    window.setTimeout (=> @detectMultiline()), 0
 
-        @clearInput()
-        @emit 'input', text
+    # skip if any modifier key is active, but always treat the Tab key
+    hasModifier = e.altKey || e.ctrlKey || e.metaKey || e.shiftKey
+    hasModifier = !hasModifier if @multiline
+    return true if hasModifier && e.keyCode != 9
+
+    switch e.keyCode
+      when 9 # tab
+        ; # TODO: insert \t
+      when 13 # return
+        @sendInput()
       when 38 # up arrow
         @history.move -1, @input.value
       when 40 # down arrow
@@ -100,6 +108,21 @@ class Page extends EventEmitter
 
   clearInput: ->
     @input.value = ''
+    return
+
+  sendInput: ->
+    text = @input.value
+    @history.push text
+
+    @clearInput()
+    @setMultiline false
+
+    @emit 'input', text
+    return
+
+  setInput: (text) ->
+    @input.value = text
+    @detectMultiline()
     return
 
   restoreInput: (key = null) ->
@@ -202,6 +225,20 @@ class Page extends EventEmitter
     wasAtBottom = Utils.isNearBottom @messages
     callback()
     Utils.scrollToBottom @messages if wasAtBottom
+    return
+
+  detectMultiline: ->
+    hasBreak = Utils.contains "\n", @input.value
+    @setMultiline hasBreak if hasBreak != @multiline
+    return
+
+  setMultiline: (enable) ->
+    if enable
+      Utils.addClass 'multiline', @node
+    else
+      Utils.removeClass 'multiline', @node
+
+    @multiline = enable
     return
 
 module.exports = Page

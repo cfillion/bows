@@ -12,8 +12,17 @@
   &> div
     margin-bottom: 6px
 
-.#{$prefix}page:not(.#{$prefix}current)
-  display: none
+.#{$prefix}page
+  &:not(.#{$prefix}current)
+    display: none
+
+  &.#{$prefix}multiline
+    .#{$prefix}messages
+      display: none
+
+    .#{$prefix}input
+      font-family: monospace
+      flex-grow: 1
 
 .#{$prefix}messages
   flex: 1 0 10em
