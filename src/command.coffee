@@ -1,7 +1,7 @@
 Utils = require './utils'
 
 COMMAND_SEPARATOR = '\x1E'
-PART_SEPARATOR = "\x1F"
+PART_SEPARATOR = '\x1F'
 
 class Command
   @serialize: (commands) ->
@@ -59,15 +59,22 @@ class Command
   argument: (index) ->
     @arguments[index] || ''
 
-  containsSeparators: (string) ->
-    Utils.contains(string, COMMAND_SEPARATOR) ||
-      Utils.contains(string, PART_SEPARATOR)
+  containsIllegal: (string) ->
+    # detects ASCII control characters
+    # see http://en.wikipedia.org/wiki/ASCII#ASCII_control_code_chart
+
+    for char in string.split ''
+      code = char.charCodeAt 0
+      continue if Utils.contains char, "\r\n\t"
+      return true if code <= 0x1F || code == 0x7F
+
+    false
 
   isValid: ->
-    return false if @containsSeparators @name
+    return false if @containsIllegal @name
 
     for argument in @arguments
-      return false if @containsSeparators argument
+      return false if @containsIllegal argument
 
     true
 

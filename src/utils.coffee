@@ -24,7 +24,7 @@ Utils =
   isArray: (variable) ->
     Array.isArray variable
 
-  contains: (string, search) ->
+  contains: (search, string) ->
     string.indexOf(search) != -1
 
   truncate: (string, maxLength) ->
