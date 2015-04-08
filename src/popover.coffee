@@ -9,22 +9,34 @@ class PopOver
     @parent.onmouseenter = => @show()
     @parent.onmouseleave = => @hide()
 
+    @body = Utils.createNode 'div', 'body'
+    @node.appendChild @body
+
     @contents = Utils.createNode 'div', 'hidden'
-    @node.appendChild @contents
+    @body.appendChild @contents
+
+    [@width, @height] = [250, 50]
 
     # wait until the browser knows what the node's color should be
     window.setTimeout =>
       @spinner = new Spinner
-        color: Utils.cssValue 'color', @node
-      @spinner.spin @node
+        color: Utils.cssValue 'color', @body
+      @spinner.spin @body
     , 0
+
+    window.addEventListener 'resize', => @updateGeometry()
+    @updateGeometry()
+
+  resize: (@width, @height) ->
+    @updateGeometry()
+    return
 
   appendChild: (node) ->
     @contents.appendChild node
     return
 
   show: ->
-    Utils.removeClass 'hidden', @node
+    Utils.show @node
 
     if @oninit
       @oninit.bind(this)()
@@ -34,11 +46,11 @@ class PopOver
     return
 
   hide: ->
-    Utils.addClass 'hidden', @node
+    Utils.hide @node
     return
 
   ready: ->
-    Utils.removeClass 'hidden', @contents
+    Utils.show @contents
     @spinner.stop()
 
     @updateGeometry()
@@ -53,7 +65,6 @@ class PopOver
     @appendChild p
 
     @ready()
-
     return
 
   clear: ->
@@ -63,9 +74,29 @@ class PopOver
   updateGeometry: ->
     rect = @parent.getBoundingClientRect()
 
-    @node.style.left = "#{rect.left}px"
-    @node.style.top = "#{rect.top - @node.offsetHeight}px"
+    [width, height] = @scale @width, @height
+    left = rect.left
+    top = rect.top - @body.offsetHeight
+
+    @body.style.width = "#{width}px"
+    @body.style.height = "#{height}px"
+    @node.style.top = "#{top}px"
+    @node.style.left = "#{left}px"
 
     return
+
+  scale: (width, height) ->
+    halfWidth = document.body.clientWidth / 1.5
+    halfHeight = document.body.clientHeight / 1.5
+
+    if width > halfWidth
+      height /= width / halfWidth
+      width = halfWidth
+
+    if height > halfHeight
+      width /= height / halfHeight
+      height = halfHeight
+
+    [width, height]
 
 module.exports = PopOver

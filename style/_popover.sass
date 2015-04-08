@@ -1,14 +1,15 @@
 .#{$prefix}popover
   position: absolute
-  min-height: 40px
-  min-width: 100px
-  padding: 15px
 
   background-color: $main-background
   border-radius: 7px
   border: 3px solid $dark-background
   box-shadow: 0 0 20px $shadow
   color: $main-foreground
+
+  .#{$prefix}body
+    padding: 15px
+    overflow: auto
 
   &:before
     content: ''

@@ -117,7 +117,9 @@ StringParser =
     if /\.(png|jpe?g|gif)($|#|\?)/.test node.href
       new PopOver node, ->
         img = Utils.createNode 'img'
-        img.onload = => @ready()
+        img.onload = =>
+          @resize img.naturalWidth, img.naturalHeight
+          @ready()
         img.onerror = => @fail()
         img.src = node.href
 
