@@ -126,6 +126,23 @@ StringParser =
 
         @appendChild img
 
+    else if match = /:\/\/(?:www\.)(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)(?:$|&)/.exec url
+      title = Utils.joinTitle 'Video Player', title
+      new PopOver node, title, ->
+        frame = Utils.createNode 'iframe'
+        frame.setAttribute 'allowfullscreen', ''
+        frame.onload = =>
+          @resize 853, 480
+          @ready()
+        frame.onerror = => @fail()
+        frame.src = "https://www.youtube-nocookie.com/embed/#{match[1]}?rel=0"
+
+        @on 'scaled', (width, height) =>
+          frame.width = width
+          frame.height = height
+
+        @appendChild frame
+
     node
 
 module.exports = StringParser
