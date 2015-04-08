@@ -92,4 +92,8 @@ Utils =
     button.appendChild document.createTextNode("\u00D7")
     button
 
+  cssValue: (property, node) ->
+    style = window.getComputedStyle node
+    style.getPropertyValue property
+
 module.exports = Utils

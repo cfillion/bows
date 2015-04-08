@@ -101,3 +101,32 @@
   margin: 0
   white-space: pre-wrap
   word-break: break-all
+
+.#{$prefix}popover
+  position: absolute
+  min-height: 40px
+  min-width: 100px
+  padding: 15px
+
+  background-color: $main-background
+  border-radius: 7px
+  border: 3px solid $dark-background
+  box-shadow: 0 0 20px $shadow
+  color: $main-foreground
+
+  &:before
+    content: ''
+    position: absolute
+    transform: rotate(45deg)
+
+    width: 10px
+    height: 10px
+    left: 5%
+    bottom: -8px
+
+    background: inherit
+    border-right: 3px solid $dark-background
+    border-bottom: 3px solid $dark-background
+
+  img
+    max-width: 100%

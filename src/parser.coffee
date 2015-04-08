@@ -1,4 +1,5 @@
 Utils = require './utils'
+PopOver = require './popover'
 
 StringParser =
   parse: (string) ->
@@ -57,20 +58,21 @@ StringParser =
     nodes = []
 
     while string.length > 0
-      if match = /\[([^\]]+?)\]\((\S+)(?: (["']?)([^\3]+)\3)?\)/.exec string
-        # inline link tags
+      if match = /!?\[([^\]]+?)\]\((\S+)(?: (["']?)([^\3]+)\3)?\)/.exec string
+        # inline link or image
         node = Utils.createNode 'a'
-        node.target = '_blank'
         node.href = match[2]
         node.title = match[4] if match[4]
         @deepParse match[1], node
+        @finishLink node
 
       else if match = /((?:https?|ftp):\/\/(?:\S)+)/.exec string
-        # automatic link
+        # literal link
         node = Utils.createNode 'a'
         node.target = '_blank'
         node.href = match[1]
         node.appendChild document.createTextNode(node.href)
+        @finishLink node
 
       else if match = /(\*\*|__)(?=\S)(.*?\S[*_]*)\1/.exec string
         # bold
@@ -107,6 +109,20 @@ StringParser =
 
   deepParse: (string, node) ->
     node.appendChild n for n in @parseMarkdown string
+    return
+
+  finishLink: (node) ->
+    node.target = '_blank'
+
+    if /\.(png|jpe?g|gif)($|#|\?)/.test node.href
+      new PopOver node, ->
+        img = Utils.createNode 'img'
+        img.onload = => @ready()
+        img.onerror = => @fail()
+        img.src = node.href
+
+        @appendChild img
+
     return
 
 module.exports = StringParser
