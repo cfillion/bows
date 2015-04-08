@@ -3,13 +3,13 @@
 
   background-color: $main-background
   border-radius: 7px
-  border: 3px solid $dark-background
+  border: 3px solid $titlebar-background
   box-shadow: 0 0 20px $shadow
   color: $main-foreground
   padding-bottom: 10px
 
   .#{$prefix}title
-    background-color: $dark-background
+    background-color: $titlebar-background
     font-size: $small-size
     font-weight: bold
     padding-left: 10px
@@ -47,10 +47,10 @@
     &:after
       top: 100%
       content: " "
-      border-top: 12px solid $dark-background
+      border-top: 12px solid $titlebar-background
 
   &.#{$prefix}below
     &:before
       bottom: 100%
       content: " "
-      border-bottom: 12px solid $dark-background
+      border-bottom: 12px solid $titlebar-background
