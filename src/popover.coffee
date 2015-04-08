@@ -123,7 +123,7 @@ class PopOver extends EventEmitter
 
   scale: (width, height) ->
     halfWidth = Utils.windowWidth() / 1.5
-    halfHeight = Utils.windowHeight() / 2
+    halfHeight = Utils.windowHeight() / 2.5
 
     if width > halfWidth
       height /= width / halfWidth
