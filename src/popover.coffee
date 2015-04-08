@@ -1,7 +1,9 @@
+EventEmitter = require './event_emitter'
+
 Spinner = require 'spin.js'
 Utils = require './utils'
 
-class PopOver
+class PopOver extends EventEmitter
   constructor: (@parent, title, @oninit) ->
     @node = Utils.createNode 'div', ['popover', 'hidden']
     @parent.appendChild @node
@@ -79,36 +81,36 @@ class PopOver
     return
 
   updateGeometry: ->
+    # reset custom styles since we may not overwrite everything
+    @node.removeAttribute 'style'
+
     parentRect = @parent.getBoundingClientRect()
+    padding = parseInt(Utils.cssValue 'padding-left', @contents) || 0
 
     [width, height] = @scale @width, @height
-    [top, left] = [parentRect.top, parentRect.left]
-    height += @title.offsetHeight
-
-    totalHeight = @node.offsetHeight
-    # workaround a weird bug where the browsers ignore the titlebar's height
-    # when the popover is displayed for the first time (FF & WebKit)
-    totalHeight += @title.offsetHeight if totalHeight < height
-
-    # align to the parent's center
-    left = Math.max 5, left - (width / 2) + (parentRect.width / 2)
-
-    if top - totalHeight < 0
-      Utils.removeClass 'above', @node
-      Utils.addClass 'below', @node
-      top += parentRect.height
-    else
-      Utils.removeClass 'below', @node
-      Utils.addClass 'above', @node
-      top -= totalHeight
-
-    widthOverflow = (left + width) - Utils.windowWidth()
-    widthOverflow += 45 # minimum margin
-    left -= widthOverflow if widthOverflow > 0
+    @emit 'scaled', width, height
+    height += @title.offsetHeight + padding
+    width += (padding * 2)
 
     @node.style.width = "#{width}px"
     @node.style.height = "#{height}px"
-    @node.style.top = "#{top}px"
+
+    if parentRect.top - @node.offsetHeight < 0
+      Utils.removeClass 'above', @node
+      Utils.addClass 'below', @node
+      @node.style.top = "#{parentRect.top + parentRect.height}px"
+    else
+      Utils.removeClass 'below', @node
+      Utils.addClass 'above', @node
+      @node.style.bottom = "#{Utils.windowHeight() - parentRect.top}px"
+
+    # align to the parent's center
+    left = Math.max 5, parentRect.left - (width / 2) + (parentRect.width / 2)
+
+    leftOverflow = (left + width) - Utils.windowWidth()
+    leftOverflow += 45 # minimum margin
+    left -= leftOverflow if leftOverflow > 0
+
     @node.style.left = "#{left}px"
 
     return
