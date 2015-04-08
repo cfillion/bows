@@ -4,6 +4,7 @@
   "private" : true,
 
   "dependencies": {
+    "spin.js": "^2.0",
     "string-hash": "^1.1"
   },
   "devDependencies": {
@@ -11,7 +12,6 @@
     "browserify": "^9.0",
     "bundle-collapser": "^1.1",
     "coffee-script": "^1.9",
-    "spin.js": "^2.0",
     "uglify-js": "^2.4"
   },
 
