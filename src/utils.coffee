@@ -96,4 +96,10 @@ Utils =
     style = window.getComputedStyle node
     style.getPropertyValue property
 
+  windowWidth: ->
+    document.body.clientWidth
+
+  windowHeight: ->
+    document.body.clientHeight
+
 module.exports = Utils

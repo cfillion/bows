@@ -9,19 +9,16 @@ class PopOver
     @parent.onmouseenter = => @show()
     @parent.onmouseleave = => @hide()
 
-    @body = Utils.createNode 'div', 'body'
-    @node.appendChild @body
-
     @contents = Utils.createNode 'div', 'hidden'
-    @body.appendChild @contents
+    @node.appendChild @contents
 
     [@width, @height] = [250, 50]
 
     # wait until the browser knows what the node's color should be
     window.setTimeout =>
       @spinner = new Spinner
-        color: Utils.cssValue 'color', @body
-      @spinner.spin @body
+        color: Utils.cssValue 'color', @node
+      @spinner.spin @node
     , 0
 
     window.addEventListener 'resize', => @updateGeometry()
@@ -75,19 +72,29 @@ class PopOver
     rect = @parent.getBoundingClientRect()
 
     [width, height] = @scale @width, @height
-    left = rect.left
-    top = rect.top - @body.offsetHeight
+    [top, left] = [rect.top, rect.left]
 
-    @body.style.width = "#{width}px"
-    @body.style.height = "#{height}px"
+    if top - height < 0
+      Utils.addClass 'below', @node
+      top += rect.height
+    else
+      Utils.addClass 'above', @node
+      top -= @node.offsetHeight
+
+    widthOverflow = (left + width) - Utils.windowWidth()
+    widthOverflow += 15 # minimum margin
+    left -= widthOverflow if widthOverflow > 0
+
+    @node.style.width = "#{width}px"
+    @node.style.height = "#{height}px"
     @node.style.top = "#{top}px"
     @node.style.left = "#{left}px"
 
     return
 
   scale: (width, height) ->
-    halfWidth = document.body.clientWidth / 1.5
-    halfHeight = document.body.clientHeight / 1.5
+    halfWidth = Utils.windowWidth() / 1.5
+    halfHeight = Utils.windowHeight() / 2
 
     if width > halfWidth
       height /= width / halfWidth
