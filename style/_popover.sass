@@ -7,22 +7,47 @@
   box-shadow: 0 0 20px $shadow
   color: $main-foreground
   text-align: center
-
-  &:before
-    content: ''
-    position: absolute
-    transform: rotate(45deg)
-
-    width: 10px
-    height: 10px
-    left: 5%
-    bottom: -8px
-
-    background: inherit
-    border-right: 3px solid $dark-background
-    border-bottom: 3px solid $dark-background
+  padding: 15px
 
   img
     background-color: white
     max-width: 100%
-    border-radius: 7px
+
+  &:before, &:after
+    left: 50%
+    border: solid transparent
+    content: attr(data-arrow)
+    height: 0
+    width: 0
+    position: absolute
+    pointer-events: none
+
+  &:before
+    border-color: transparent
+    border-width: 10px
+    margin-left: -10px
+
+  &:after
+    border-color: transparent
+    border-width: 6px
+    margin-left: -6px
+
+  &.#{$prefix}above
+    &:before, &:after
+      top: 100%
+
+    &:before
+      border-top-color: $dark-background
+
+    &:after
+      border-top-color: $main-background
+
+  &.#{$prefix}below
+    &:before, &:after
+      bottom: 100%
+
+    &:before
+      border-bottom-color: $dark-background
+
+    &:after
+      border-bottom-color: $main-background

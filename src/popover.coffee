@@ -69,20 +69,25 @@ class PopOver
     return
 
   updateGeometry: ->
-    rect = @parent.getBoundingClientRect()
+    parentRect = @parent.getBoundingClientRect()
 
     [width, height] = @scale @width, @height
-    [top, left] = [rect.top, rect.left]
+    [top, left] = [parentRect.top, parentRect.left]
+
+    # align to the parent's center
+    left = Math.max 5, left - (width / 2) + (parentRect.width / 2)
 
     if top - height < 0
+      Utils.removeClass 'above', @node
       Utils.addClass 'below', @node
-      top += rect.height
+      top += parentRect.height
     else
+      Utils.removeClass 'below', @node
       Utils.addClass 'above', @node
       top -= @node.offsetHeight
 
     widthOverflow = (left + width) - Utils.windowWidth()
-    widthOverflow += 15 # minimum margin
+    widthOverflow += 45 # minimum margin
     left -= widthOverflow if widthOverflow > 0
 
     @node.style.width = "#{width}px"
