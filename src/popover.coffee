@@ -60,13 +60,19 @@ class PopOver extends EventEmitter
     @updateGeometry()
     return
 
-  fail: (message = null) ->
+  fail: ->
     @clear()
 
-    message || (message = 'The preview could not be loaded.')
-    p = Utils.createNode 'p'
-    p.appendChild document.createTextNode(message)
-    @appendChild p
+    message = 'The preview could not be loaded.'
+    p1 = Utils.createNode 'p'
+    p1.appendChild document.createTextNode(message)
+    @appendChild p1
+
+    btn = Utils.createNode 'span', 'btn-active'
+    btn.appendChild document.createTextNode('Open in a new tab')
+    p2 = Utils.createNode 'p'
+    p2.appendChild btn
+    @appendChild p2
 
     @ready()
     return

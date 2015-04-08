@@ -22,7 +22,7 @@ StringParser =
       nodes
 
   multilineNodes: (string) ->
-    button = Utils.createNode 'span', 'expand'
+    button = Utils.createNode 'span', 'btn-active'
 
     oneLiner = Utils.createNode 'span'
 
@@ -134,7 +134,6 @@ StringParser =
         frame.onload = =>
           @resize 853, 480
           @ready()
-        frame.onerror = => @fail()
         frame.src = "https://www.youtube-nocookie.com/embed/#{match[1]}?rel=0"
 
         @on 'scaled', (width, height) =>
