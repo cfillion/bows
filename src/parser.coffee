@@ -58,21 +58,13 @@ StringParser =
     nodes = []
 
     while string.length > 0
-      if match = /!?\[([^\]]+?)\]\((\S+)(?: (["']?)([^\3]+)\3)?\)/.exec string
+      if match = /!?\[([^\]]*?)\]\((\S+)(?: (["']?)([^\3]+)\3)?\)/.exec string
         # inline link or image
-        node = Utils.createNode 'a'
-        node.href = match[2]
-        node.title = match[4] if match[4]
-        @deepParse match[1], node
-        @finishLink node
+        node = @createLink match[2], match[1], match[4]
 
       else if match = /((?:https?|ftp):\/\/(?:\S)+)/.exec string
         # literal link
-        node = Utils.createNode 'a'
-        node.target = '_blank'
-        node.href = match[1]
-        node.appendChild document.createTextNode(node.href)
-        @finishLink node
+        node = @createLink match[1]
 
       else if match = /(\*\*|__)(?=\S)(.*?\S[*_]*)\1/.exec string
         # bold
@@ -111,21 +103,29 @@ StringParser =
     node.appendChild n for n in @parseMarkdown string
     return
 
-  finishLink: (node) ->
+  createLink: (url, label, title) ->
+    node = Utils.createNode 'a'
     node.target = '_blank'
+    node.href = url
+    node.title = title if title
 
-    if /\.(png|jpe?g|gif)($|#|\?)/.test node.href
-      title = Utils.joinTitle 'Image Preview', node.title
+    if label
+      @deepParse label, node
+    else
+      node.appendChild document.createTextNode(url)
+
+    if /\.(png|jpe?g|gif)($|#|\?)/.test url
+      title = Utils.joinTitle 'Image Preview', title
       new PopOver node, title, ->
         img = Utils.createNode 'img'
         img.onload = =>
           @resize img.naturalWidth, img.naturalHeight
           @ready()
         img.onerror = => @fail()
-        img.src = node.href
+        img.src = url
 
         @appendChild img
 
-    return
+    node
 
 module.exports = StringParser
