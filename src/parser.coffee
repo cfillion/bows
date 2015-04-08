@@ -115,7 +115,8 @@ StringParser =
     node.target = '_blank'
 
     if /\.(png|jpe?g|gif)($|#|\?)/.test node.href
-      new PopOver node, ->
+      title = Utils.joinTitle 'Image Preview', node.title
+      new PopOver node, title, ->
         img = Utils.createNode 'img'
         img.onload = =>
           @resize img.naturalWidth, img.naturalHeight

@@ -2,17 +2,21 @@ Spinner = require 'spin.js'
 Utils = require './utils'
 
 class PopOver
-  constructor: (@parent, @oninit) ->
+  constructor: (@parent, title, @oninit) ->
     @node = Utils.createNode 'div', ['popover', 'hidden']
     @parent.appendChild @node
 
     @parent.onmouseenter = => @show()
     @parent.onmouseleave = => @hide()
 
-    @contents = Utils.createNode 'div', 'hidden'
+    @title = Utils.createNode 'div', ['title', 'hidden']
+    @setTitle title if title
+    @node.appendChild @title
+
+    @contents = Utils.createNode 'div', ['contents', 'hidden']
     @node.appendChild @contents
 
-    [@width, @height] = [250, 50]
+    [@width, @height] = [250, 80]
 
     # wait until the browser knows what the node's color should be
     window.setTimeout =>
@@ -47,6 +51,7 @@ class PopOver
     return
 
   ready: ->
+    Utils.show @title
     Utils.show @contents
     @spinner.stop()
 
@@ -68,23 +73,34 @@ class PopOver
     Utils.clearNode @contents
     return
 
+  setTitle: (text) ->
+    Utils.clearNode @title
+    @title.appendChild document.createTextNode(text)
+    return
+
   updateGeometry: ->
     parentRect = @parent.getBoundingClientRect()
 
     [width, height] = @scale @width, @height
     [top, left] = [parentRect.top, parentRect.left]
+    height += @title.offsetHeight
+
+    totalHeight = @node.offsetHeight
+    # workaround a weird bug where the browsers ignore the titlebar's height
+    # when the popover is displayed for the first time (FF & WebKit)
+    totalHeight += @title.offsetHeight if totalHeight < height
 
     # align to the parent's center
     left = Math.max 5, left - (width / 2) + (parentRect.width / 2)
 
-    if top - height < 0
+    if top - totalHeight < 0
       Utils.removeClass 'above', @node
       Utils.addClass 'below', @node
       top += parentRect.height
     else
       Utils.removeClass 'below', @node
       Utils.addClass 'above', @node
-      top -= @node.offsetHeight
+      top -= totalHeight
 
     widthOverflow = (left + width) - Utils.windowWidth()
     widthOverflow += 45 # minimum margin

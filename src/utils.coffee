@@ -34,6 +34,9 @@ Utils =
 
     return string
 
+  joinTitle: (args...) ->
+    args.filter((v) -> v).join ' — '
+
   prefix: (identifier) ->
     "bows-#{identifier}"
 

@@ -6,8 +6,20 @@
   border: 3px solid $dark-background
   box-shadow: 0 0 20px $shadow
   color: $main-foreground
-  text-align: center
-  padding: 15px
+  padding-bottom: 10px
+
+  .#{$prefix}title
+    font-size: $small-size
+    font-weight: bold
+    padding: 5px
+    padding-left: 10px
+    background-color: $dark-background
+
+    &:empty
+      display: none
+
+  .#{$prefix}contents
+    padding: 10px
 
   img
     background-color: white
@@ -40,7 +52,7 @@
       border-top-color: $dark-background
 
     &:after
-      border-top-color: $main-background
+      border-top-color: $dark-background
 
   &.#{$prefix}below
     &:before, &:after
@@ -50,4 +62,4 @@
       border-bottom-color: $dark-background
 
     &:after
-      border-bottom-color: $main-background
+      border-bottom-color: $dark-background
