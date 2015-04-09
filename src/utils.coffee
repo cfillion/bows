@@ -105,4 +105,16 @@ Utils =
   windowHeight: ->
     document.body.clientHeight
 
+  insertText: (string, textarea) ->
+    [start, end] = [textarea.selectionStart, textarea.selectionEnd]
+
+    before = textarea.value.substring 0, start
+    suffix = textarea.value.substring end
+    textarea.value = before + string + suffix
+
+    cursor = start + string.length
+    textarea.setSelectionRange cursor, cursor
+
+    return
+
 module.exports = Utils

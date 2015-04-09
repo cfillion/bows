@@ -58,7 +58,7 @@ class Page extends EventEmitter
 
     switch e.keyCode
       when 9 # tab
-        ; # TODO: insert \t
+        Utils.insertText "\t", @input
       when 13 # return
         passThrough = if @multiline then !hasModifier else hasModifier
         return true if passThrough
