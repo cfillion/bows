@@ -126,7 +126,7 @@ StringParser =
 
         @appendChild img
 
-    else if match = /:\/\/(?:www\.)(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)(?:$|&)/.exec url
+    else if match = /:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)(?:$|&)/.exec url
       title = Utils.joinTitle 'Video Player', title
       new PopOver node, title, ->
         frame = Utils.createNode 'iframe'
