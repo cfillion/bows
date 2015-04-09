@@ -5,7 +5,7 @@ NODE_BIN = `npm bin`
 BROWSERIFY = $(NODE_BIN)/browserify
 COFFEE = $(NODE_BIN)/coffee
 UGLIFY = $(NODE_BIN)/uglifyjs
-SASS = sass
+SASS = $GEM_HOME/bin/sass
 PREFIXER = $(NODE_BIN)/autoprefixer
 
 # source files
