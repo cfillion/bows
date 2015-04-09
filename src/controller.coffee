@@ -9,15 +9,16 @@ ServerCommands = require './server_commands'
 
 class Controller
   constructor: (config) ->
-    @socket = new Socket config['server_url']
     @ui = new Layout
 
-    for roomName in config['default_rooms']
-      page = @ui.createPage roomName, true
+    @pinnedRooms = config['default_rooms']
+    for room in @pinnedRooms
+      page = @ui.createPage room, true
       @ui.setClosable page, false
-      @socket.pinRoom roomName
 
     @ui.setCurrentPage 0
+
+    @socket = new Socket config['server_url']
 
     @ui.on 'input', (t, p) => @parseUserInput t, p
     @socket.on 'command', (c) => @execServerCommand c
@@ -75,6 +76,9 @@ class Controller
       return false
 
   connected: ->
+    for room in @pinnedRooms
+      @socket.send 'join', room, [room]
+
     @ui.statusbar.setStatus ->
       @addIndicator 'Online'
 
@@ -85,6 +89,15 @@ class Controller
       @addError 'Offline'
       @addOngoing "Reconnecting in the background"
 
+    return
+
+  pinRoom: (room) ->
+    @pinnedRooms.push room unless Utils.contains room, @pinnedRooms
+    return
+
+  unpinRoom: (room) ->
+    index = @pinnedRooms.indexOf room
+    @pinnedRooms.splice index, 1 if index != -1
     return
 
 module.exports = Controller

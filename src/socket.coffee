@@ -10,7 +10,6 @@ class Socket extends EventEmitter
 
     @attemps = 0
     @queue = []
-    @pinnedRooms = []
 
     @open()
 
@@ -23,9 +22,6 @@ class Socket extends EventEmitter
   onopen: ->
     @emit 'connected'
     @attemps = 0
-
-    for room in @pinnedRooms
-      @send 'join', room, [room]
 
     while @queue.length > 0
       message = @queue.shift()
@@ -72,14 +68,5 @@ class Socket extends EventEmitter
       @queue.push text
 
     true
-
-  pinRoom: (room) ->
-    @pinnedRooms.push room unless Utils.contains room, @pinnedRooms
-    return
-
-  unpinRoom: (room) ->
-    index = @pinnedRooms.indexOf room
-    @pinnedRooms.splice index, 1 if index != -1
-    return
 
 module.exports = Socket
