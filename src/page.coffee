@@ -102,7 +102,9 @@ class Page extends EventEmitter
 
   clear: ->
     Utils.clearNode @messages
-    Utils.clearNode @alerts
+    Utils.clearNode @notices
+    @history.clear()
+
     @addLine 'page cleared'
     return
 

@@ -4,9 +4,13 @@ hash = require 'string-hash'
 
 class History extends EventEmitter
   constructor: ->
+    @clear()
+
+  clear: ->
     @stack = []
     @hashTable = {}
     @currentPosition = 0
+    return
 
   move: (steps, originalInput) ->
     @moveTo @currentPosition - steps, originalInput
