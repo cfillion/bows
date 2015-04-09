@@ -15,6 +15,7 @@ class Controller
     for roomName in config['default_rooms']
       page = @ui.createPage roomName, true
       @ui.setClosable page, false
+      @socket.pinRoom roomName
 
     @ui.setCurrentPage 0
 
@@ -74,10 +75,6 @@ class Controller
       return false
 
   connected: ->
-    # (re)join opened rooms
-    for page in @ui.pages when page.isRoom
-      @socket.send 'join', page.identifier, [page.identifier]
-
     @ui.statusbar.setStatus ->
       @addIndicator 'Online'
 
