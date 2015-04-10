@@ -31,13 +31,13 @@ ClientCommands =
     room = args[0] || page.identifier
 
     ctrl.ui.delayFocus room
-    ctrl.socket.pinRoom room
+    ctrl.pinRoom room
     send 'join', room
 
   part: (args, page, ctrl, send) ->
     room = (args.shift() if args[0] && args[0][0] == '#') || page.identifier
 
-    ctrl.socket.unpinRoom room
+    ctrl.unpinRoom room
     send 'part', room, args.join("\x20")
 
   clear: (args, page) ->
